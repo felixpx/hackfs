@@ -177,7 +177,7 @@ const footerNavigation = {
   ],
 };
 
-export default function Example() {
+export default function Landing() {
   return (
     <div className="bg-white">
       <main>

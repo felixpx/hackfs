@@ -3,44 +3,50 @@ import { Popover, Transition } from "@headlessui/react";
 import {
   AnnotationIcon,
   ChatAlt2Icon,
+  GlobeAltIcon,
+  HomeIcon,
   InboxIcon,
   MenuIcon,
+  PlusCircleIcon,
   QuestionMarkCircleIcon,
+  VideoCameraIcon,
   XIcon,
 } from "@heroicons/react/outline";
 import { ChevronDownIcon } from "@heroicons/react/solid";
+import { useMoralis } from "react-moralis";
 
 const solutions = [
   {
-    name: "Inbox",
-    description:
-      "Get a better understanding of where your traffic is coming from.",
-    href: "#",
-    icon: InboxIcon,
+    name: "Home",
+    description: "Homepage",
+    href: "/",
+    icon: HomeIcon,
   },
   {
-    name: "Messaging",
-    description: "Speak directly to your customers in a more meaningful way.",
-    href: "#",
-    icon: AnnotationIcon,
+    name: "Pro Plan",
+    description: "Pro Plan.",
+    href: "/proplan",
+    icon: PlusCircleIcon,
   },
   {
-    name: "Live Chat",
-    description: "Your customers' data will be safe and secure.",
-    href: "#",
-    icon: ChatAlt2Icon,
+    name: "Dashboard",
+    description: "Dashboard",
+    href: "/dashboard",
+    icon: GlobeAltIcon,
   },
   {
-    name: "Knowledge Base",
-    description: "Connect with third-party tools that you're already using.",
-    href: "#",
-    icon: QuestionMarkCircleIcon,
+    name: "Liveroom",
+    description: "Liveroom",
+    href: "/liveroom",
+    icon: VideoCameraIcon,
   },
 ];
 
 export default function Header() {
+  const { authenticate, isAuthenticated, logout } = useMoralis();
+
   return (
-    <header className="w-full">
+    <header className="w-full absolute top-0">
       <Popover className="relative bg-white">
         <div className="flex justify-between items-center max-w-7xl mx-auto px-4 py-6 sm:px-6 md:justify-start md:space-x-10 lg:px-8">
           <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -59,33 +65,44 @@ export default function Header() {
               <MenuIcon className="h-6 w-6" aria-hidden="true" />
             </Popover.Button>
           </div>
-          <Popover.Group as="nav" className="hidden md:flex space-x-10">
-            <a
-              href="/"
-              className="text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              Home
-            </a>
-            <a
-              href="#"
-              className="text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              Pro Plan
-            </a>
-            <a
-              href="#"
-              className="text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              Dashboard
-            </a>
-          </Popover.Group>
+          {!isAuthenticated && (
+            <Popover.Group as="nav" className="hidden md:flex space-x-10">
+              <a
+                href="/"
+                className="text-base font-medium text-gray-500 hover:text-gray-900"
+              >
+                Home
+              </a>
+              <a
+                href="#"
+                className="text-base font-medium text-gray-500 hover:text-gray-900"
+              >
+                Dashboard
+              </a>
+              <a
+                href="#"
+                className="text-base font-medium text-gray-500 hover:text-gray-900"
+              >
+                Pro
+              </a>
+            </Popover.Group>
+          )}
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <a
-              href="#"
-              className="ml-8 whitespace-nowrap inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
-            >
-              Login
-            </a>
+            {!isAuthenticated ? (
+              <a
+                onClick={authenticate}
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
+              >
+                Login
+              </a>
+            ) : (
+              <a
+                onClick={logout}
+                className="ml-8 whitespace-nowrap inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
+              >
+                Logout
+              </a>
+            )}
           </div>
         </div>
 
@@ -119,59 +136,44 @@ export default function Header() {
                     </Popover.Button>
                   </div>
                 </div>
-                <div className="mt-6">
-                  <nav className="grid grid-cols-1 gap-7">
-                    {solutions.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className="-m-3 p-3 flex items-center rounded-lg hover:bg-gray-50"
-                      >
-                        <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
-                          <item.icon className="h-6 w-6" aria-hidden="true" />
-                        </div>
-                        <div className="ml-4 text-base font-medium text-gray-900">
-                          {item.name}
-                        </div>
-                      </a>
-                    ))}
-                  </nav>
-                </div>
+                {!isAuthenticated && (
+                  <div className="mt-6">
+                    <nav className="grid grid-cols-1 gap-7">
+                      {solutions.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="-m-3 p-3 flex items-center rounded-lg hover:bg-gray-50"
+                        >
+                          <div className="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                            <item.icon className="h-6 w-6" aria-hidden="true" />
+                          </div>
+                          <div className="ml-4 text-base font-medium text-gray-900">
+                            {item.name}
+                          </div>
+                        </a>
+                      ))}
+                    </nav>
+                  </div>
+                )}
               </div>
               <div className="py-6 px-5">
-                <div className="grid grid-cols-2 gap-4">
-                  <a
-                    href="#"
-                    className="text-base font-medium text-gray-900 hover:text-gray-700"
-                  >
-                    Pricing
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base font-medium text-gray-900 hover:text-gray-700"
-                  >
-                    Partners
-                  </a>
-                  <a
-                    href="#"
-                    className="text-base font-medium text-gray-900 hover:text-gray-700"
-                  >
-                    Company
-                  </a>
-                </div>
-                <div className="mt-6">
-                  <a
-                    href="#"
-                    className="w-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
-                  >
-                    Sign up
-                  </a>
-                  <p className="mt-6 text-center text-base font-medium text-gray-500">
-                    Existing customer?
-                    <a href="#" className="text-gray-900">
-                      Sign in
+                <div className="">
+                  {!isAuthenticated ? (
+                    <a
+                      onClick={authenticate}
+                      className="w-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
+                    >
+                      Metamask Login
                     </a>
-                  </p>
+                  ) : (
+                    <a
+                      onClick={logout}
+                      className="w-full flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
+                    >
+                      Logout
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
