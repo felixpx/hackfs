@@ -12,7 +12,7 @@ import { useMoralis } from "react-moralis";
 const navigation = [
   { name: "Pro", href: "#", icon: PlusCircleIcon, current: true },
   { name: "Videocalls", href: "#", icon: VideoCameraIcon, current: false },
-  { name: "Schedules", href: "#", icon: CalendarIcon, current: false },
+  { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
   { name: "Poaps", href: "#", icon: UserGroupIcon, current: false },
   { name: "Archive", href: "#", icon: ArchiveIcon, current: false },
   {
@@ -27,7 +27,7 @@ function classNames(...classes) {
 }
 
 export default function Dashboard() {
-  const { Moralis } = useMoralis();
+  const { Moralis, user } = useMoralis();
   const [isPro, setIsPro] = useState(false);
 
   function mintProSubscription(e) {
@@ -77,6 +77,8 @@ export default function Dashboard() {
     const team = new Team();
 
     // set & save team in database
+    user.set("teamName", name);
+    user.save();
     team.set("name", name);
     team.set("member", member);
     team.set("member1", member1);
@@ -161,7 +163,7 @@ export default function Dashboard() {
                       type="text"
                       name="username"
                       id="username"
-                      value={teamName}
+                      value={user.get("teamName")}
                       disabled={!isPro}
                       className={`${
                         !isPro && "cursor-not-allowed"
