@@ -9,17 +9,23 @@ import {
 import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
+import Videocalls from "./DashboardTabs/Videocalls";
+import Notifications from "./DashboardTabs/Notifications";
+import Schedule from "./DashboardTabs/Schedule";
+import Archive from "./DashboardTabs/Archive";
+import Poaps from "./DashboardTabs/Poaps";
+
 const navigation = [
   { name: "Pro", href: "#", icon: PlusCircleIcon, current: true },
   { name: "Videocalls", href: "#", icon: VideoCameraIcon, current: false },
-  { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
-  { name: "Poaps", href: "#", icon: UserGroupIcon, current: false },
-  { name: "Archive", href: "#", icon: ArchiveIcon, current: false },
   {
     name: "Notifications",
     icon: InboxIcon,
     current: false,
   },
+  { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
+  { name: "Archive", href: "#", icon: ArchiveIcon, current: false },
+  { name: "Poaps", href: "#", icon: UserGroupIcon, current: false },
 ];
 
 function classNames(...classes) {
@@ -29,6 +35,8 @@ function classNames(...classes) {
 export default function Dashboard() {
   const { Moralis, user } = useMoralis();
   const [isPro, setIsPro] = useState(false);
+
+  const [selectedTab, setSelectedTab] = useState("Pro");
 
   function mintProSubscription(e) {
     e.preventDefault();
@@ -93,35 +101,37 @@ export default function Dashboard() {
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
       <aside className="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
         <nav className="space-y-1">
-          {navigation.map((item) => (
+          {navigation.map((tab) => (
             <a
-              key={item.name}
-              href={item.href}
+              key={tab.name}
+              onClick={() => {
+                setSelectedTab(tab.name);
+              }}
               className={classNames(
-                item.current
+                selectedTab == tab.name
                   ? "bg-gray-50 text-indigo-700 hover:text-indigo-700 hover:bg-white"
                   : "text-gray-900 hover:text-gray-900 hover:bg-gray-50",
                 "group rounded-md px-3 py-2 flex items-center text-sm font-medium"
               )}
-              aria-current={item.current ? "page" : undefined}
+              aria-current={tab.current ? "page" : undefined}
             >
-              <item.icon
+              <tab.icon
                 className={classNames(
-                  item.current
+                  selectedTab == tab.name
                     ? "text-indigo-500 group-hover:text-indigo-500"
                     : "text-gray-400 group-hover:text-gray-500",
                   "flex-shrink-0 -ml-1 mr-3 h-6 w-6"
                 )}
                 aria-hidden="true"
               />
-              <span className="truncate">{item.name}</span>
+              <span className="truncate">{tab.name}</span>
             </a>
           ))}
         </nav>
       </aside>
 
       <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
-        <div action="#" method="POST">
+        <div hidden={selectedTab != "Pro"}>
           <div className="shadow sm:rounded-md sm:overflow-hidden">
             <div className="bg-white py-6 px-4 space-y-6 sm:p-6">
               <div>
@@ -266,6 +276,22 @@ export default function Dashboard() {
               )}
             </div>
           </div>
+        </div>
+
+        <div hidden={selectedTab != "Videocalls"}>
+          <Videocalls />
+        </div>
+        <div hidden={selectedTab != "Notifications"}>
+          <Notifications />
+        </div>
+        <div hidden={selectedTab != "Schedule"}>
+          <Schedule />
+        </div>
+        <div hidden={selectedTab != "Archive"}>
+          <Archive />
+        </div>
+        <div hidden={selectedTab != "Poaps"}>
+          <Poaps />
         </div>
 
         {/* <form action="#" method="POST">
