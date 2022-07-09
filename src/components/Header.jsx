@@ -1,18 +1,13 @@
 import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import {
-  AnnotationIcon,
-  ChatAlt2Icon,
   GlobeAltIcon,
   HomeIcon,
-  InboxIcon,
   MenuIcon,
   PlusCircleIcon,
-  QuestionMarkCircleIcon,
   VideoCameraIcon,
   XIcon,
 } from "@heroicons/react/outline";
-import { ChevronDownIcon } from "@heroicons/react/solid";
 import { useMoralis } from "react-moralis";
 
 const solutions = [
@@ -65,7 +60,7 @@ export default function Header() {
               <MenuIcon className="h-6 w-6" aria-hidden="true" />
             </Popover.Button>
           </div>
-          {!isAuthenticated && (
+          {/* {!isAuthenticated && (
             <Popover.Group as="nav" className="hidden md:flex space-x-10">
               <a
                 href="/"
@@ -86,22 +81,22 @@ export default function Header() {
                 Pro
               </a>
             </Popover.Group>
-          )}
+          )} */}
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             {!isAuthenticated ? (
-              <a
+              <button
                 onClick={authenticate}
                 className="ml-8 whitespace-nowrap inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
               >
                 Login
-              </a>
+              </button>
             ) : (
-              <a
+              <button
                 onClick={logout}
                 className="ml-8 whitespace-nowrap inline-flex items-center justify-center bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:from-purple-700 hover:to-indigo-700"
               >
                 Logout
-              </a>
+              </button>
             )}
           </div>
         </div>
