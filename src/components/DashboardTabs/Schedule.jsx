@@ -1,7 +1,14 @@
 import { useState } from "react";
+import { useMoralis } from "react-moralis";
 
 export default function Videocalls() {
   const [isPro, setIsPro] = useState(false);
+
+  const { Moralis, user } = useMoralis();
+
+  function addDate() {
+    // logic fo storing dates
+  }
 
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
@@ -33,95 +40,35 @@ export default function Videocalls() {
               htmlFor="company-website"
               className="block text-sm font-medium text-gray-700"
             >
-              Team / Business / DAO
+              Add Date for {user.get("teamName")}
             </label>
             <div className="mt-1 rounded-md shadow-sm flex">
               <input
-                type="text"
-                name="username"
-                id="username"
-                // value={user.get("teamName")}
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+                type="date"
+                name="newDate"
+                id="newDate"
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
               />
             </div>
+            <button
+              onClick={addDate}
+              className={`mt-4 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+            >
+              Add Date
+            </button>
           </div>
 
           {/* Members */}
           <div className="col-span-3 sm:col-span-2">
-            <label
-              htmlFor="company-website"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Members
+            <label className="block text-sm font-medium text-gray-700">
+              Upcoming Dates
             </label>
             <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
+              <span className="bg-gray-50 mb-2 h-10 border border-gray-300 rounded-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
+                20.07.2022
+                {/* QUERY UPCOMING DATES */}
               </span>
-              <input
-                type="text"
-                name="member"
-                id="member"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
             </div>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
-              </span>
-              <input
-                type="text"
-                name="member1"
-                id="member1"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
-              </span>
-              <input
-                type="text"
-                name="member2"
-                id="member2"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
-              </span>
-              <input
-                type="text"
-                name="member3"
-                id="member3"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
-            <button
-              type="button"
-              disabled={!isPro}
-              className={`mt-4 ${
-                !isPro && "cursor-not-allowed"
-              } bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-            >
-              Add Member
-            </button>
           </div>
         </div>
       </div>
