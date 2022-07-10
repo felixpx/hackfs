@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useMoralis } from "react-moralis";
 
 export default function Videocalls() {
+  const { user } = useMoralis();
   const [isPro, setIsPro] = useState(false);
 
   return (
@@ -26,102 +28,20 @@ export default function Videocalls() {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className="flex flex-col space-y-4 items-center justify-center ">
           {/* NAME */}
           <div className="col-span-3 sm:col-span-2">
             <label
               htmlFor="company-website"
               className="block text-sm font-medium text-gray-700"
             >
-              Team / Business / DAO
+              {user.get("teamName")}
             </label>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <input
-                type="text"
-                name="username"
-                id="username"
-                // value={user.get("teamName")}
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
           </div>
 
-          {/* Members */}
-          <div className="col-span-3 sm:col-span-2">
-            <label
-              htmlFor="company-website"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Members
-            </label>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
-              </span>
-              <input
-                type="text"
-                name="member"
-                id="member"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
-              </span>
-              <input
-                type="text"
-                name="member1"
-                id="member1"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
-              </span>
-              <input
-                type="text"
-                name="member2"
-                id="member2"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
-            <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
-                Address
-              </span>
-              <input
-                type="text"
-                name="member3"
-                id="member3"
-                disabled={!isPro}
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div>
-            <button
-              type="button"
-              disabled={!isPro}
-              className={`mt-4 ${
-                !isPro && "cursor-not-allowed"
-              } bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
-            >
-              Add Member
-            </button>
+          {/* EMBED VIDEOPLAYER */}
+          <div className="bg-black h-96 w-full text-white justify-center items-center flex flex-col">
+            This is the video player
           </div>
         </div>
       </div>
@@ -131,7 +51,7 @@ export default function Videocalls() {
             // onClick={mintProSubscription}
             className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Start Videocall
+            Start
           </button>
         ) : (
           <button
