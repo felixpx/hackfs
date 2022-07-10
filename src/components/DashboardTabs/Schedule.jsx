@@ -1,14 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
 export default function Videocalls() {
-  const [isPro, setIsPro] = useState(false);
+  const {
+    Moralis,
+    user,
+    isAuthenticated,
+    isWeb3Enabled,
+    isWeb3EnableLoading,
+    enableWeb3,
+  } = useMoralis();
 
-  const { Moralis, user } = useMoralis();
+  const [newDate, setNewDate] = useState();
+  const [isPro, setIsPro] = useState(true);
 
-  function addDate() {
-    // logic fo storing dates
+  function addDate(e) {
+    e.preventDefault();
+    if (!isPro) {
+      alert("need to have pro for scheduled calls.");
+    } else {
+      // store new date
+      const team = user.get("teamName");
+      const newDate = document.getElementById("newDate").value;
+
+      // save new Date in Moralis
+      const Schedule = new Moralis.Object.extend("Schedules");
+      const schedule = new Schedule();
+
+      schedule.set("team", team);
+      schedule.set("newDate", newDate);
+      schedule.save().then(() => {
+        alert("new Date added");
+      });
+    }
   }
+
+  useEffect(() => {
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+
+    const Team = Moralis.Object.extend("Teams");
+    const query = new Moralis.Query(Team);
+    query.equalTo("owner", user.get("ethAddress"));
+    query.equalTo("team", user.get("teamName"));
+    query.find().then((result) => {
+      setNewDate(result);
+      console.log(result);
+    });
+  }, [user]);
 
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
