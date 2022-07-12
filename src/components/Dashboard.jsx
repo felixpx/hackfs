@@ -18,12 +18,12 @@ import Poaps from "./DashboardTabs/Poaps";
 const navigation = [
   { name: "Pro", href: "#", icon: PlusCircleIcon, current: true },
   { name: "Videocalls", href: "#", icon: VideoCameraIcon, current: false },
-  { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
   {
     name: "Notifications",
     icon: InboxIcon,
     current: false,
   },
+  { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
   { name: "Archive", href: "#", icon: ArchiveIcon, current: false },
   { name: "Poaps", href: "#", icon: UserGroupIcon, current: false },
 ];

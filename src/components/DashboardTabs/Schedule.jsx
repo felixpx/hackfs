@@ -38,9 +38,9 @@ export default function Videocalls() {
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
 
-    const Team = Moralis.Object.extend("Teams");
-    const query = new Moralis.Query(Team);
-    query.equalTo("owner", user.get("ethAddress"));
+    const Schedule = Moralis.Object.extend("Schedules");
+    const query = new Moralis.Query(Schedule);
+    // query.equalTo("owner", user.get("ethAddress"));
     query.equalTo("team", user.get("teamName"));
     query.find().then((result) => {
       setNewDate(result);
