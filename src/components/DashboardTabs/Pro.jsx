@@ -11,7 +11,6 @@ export default function Pro() {
     // contractCall();
   }
 
-  const [teamInfo, setTeamInfo] = useState([]);
   const [teamName, setTeamName] = useState("");
 
   useEffect(() => {
@@ -40,6 +39,7 @@ export default function Pro() {
     }
 
     // team info
+    const daoAddress = document.getElementById("daoAddress").value;
     const name = document.getElementById("username").value;
     const member = document.getElementById("member").value;
     const member1 = document.getElementById("member1").value;
@@ -53,7 +53,9 @@ export default function Pro() {
 
     // set & save team in database
     user.set("teamName", name);
+    user.set("daoAddress", daoAddress);
     user.save();
+    team.set("daoAddress", daoAddress);
     team.set("name", name);
     team.set("member", member);
     team.set("member1", member1);
@@ -89,13 +91,37 @@ export default function Pro() {
         </div>
 
         <div className="grid grid-cols-3 gap-6">
-          {/* NAME */}
           <div className="col-span-3 sm:col-span-2">
             <label
               htmlFor="company-website"
               className="block text-sm font-medium text-gray-700"
             >
-              Team / Business / DAO
+              DAO Member Token Address
+            </label>
+            <div className="mt-1 rounded-md shadow-sm flex">
+              <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
+                Address
+              </span>
+              <input
+                type="text"
+                name="daoAddress"
+                id="daoAddress"
+                disabled={!isPro}
+                className={`${
+                  !isPro && "cursor-not-allowed"
+                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+              />
+            </div>
+          </div>
+
+          {/* NAME */}
+          <div className="col-span-3 sm:col-span-2">
+            <p className="mb-8 ">OR</p>
+            <label
+              htmlFor="company-website"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Custom Team
             </label>
             <div className="mt-1 rounded-md shadow-sm flex">
               <span className="bg-gray-50 border border-r-0 border-gray-300 rounded-l-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
@@ -196,7 +222,7 @@ export default function Pro() {
             onClick={mintProSubscription}
             className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Buy Pro
+            Buy Pro First
           </button>
         ) : (
           <button
