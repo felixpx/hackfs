@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useMoralis } from "react-moralis";
+import { useMoralis, useMoralisFile } from "react-moralis";
+import { NFTStorage } from "nft.storage";
 
 export default function Videocalls() {
   const {
@@ -10,38 +11,77 @@ export default function Videocalls() {
     isWeb3EnableLoading,
     enableWeb3,
   } = useMoralis();
+  const { saveFile } = useMoralisFile();
+
+  const [nftstorage] = useState(
+    new NFTStorage({ token: process.env.REACT_APP_NFT_STORAGE_API_KEY })
+  );
 
   const [newDate, setNewDate] = useState();
   const [isPro, setIsPro] = useState(true);
 
-  function addDate(e) {
+  async function addDate(e) {
     e.preventDefault();
     if (!isPro) {
       alert("need to have pro for scheduled calls.");
     } else {
       // store new date
       const team = user.get("teamName");
+      const tokenId = user.get("daoAddress");
       const newDate = document.getElementById("newDate").value;
+      const meetingCost = document.getElementById("meetingCost").value;
+      const meetingName = document.getElementById("meetingName").value;
+      const meetingDescription =
+        document.getElementById("meetingDescription").value;
+      const meetingFile = document.getElementById("meetingFile").files[0];
+
+      let ipfsFile = "";
+
+      if (meetingFile) {
+        console.log("uploading xibit file");
+        await saveFile("meetingFile", meetingFile, { saveIPFS: true }).then(
+          async (hash) => {
+            console.log(hash);
+            ipfsFile = hash._ipfs;
+          }
+        );
+      }
+
+      const metadata = await nftstorage.store({
+        name: meetingName,
+        description: meetingDescription,
+        image: meetingFile,
+        properties: {
+          date: newDate,
+          price: meetingCost,
+        },
+      });
+
+      console.log(metadata.url);
+      console.log(metadata);
 
       // save new Date in Moralis
       const Schedule = new Moralis.Object.extend("Schedules");
       const schedule = new Schedule();
 
       schedule.set("team", team);
+      schedule.set("tokenId", tokenId);
       schedule.set("newDate", newDate);
-      schedule.save().then(() => {
-        alert("new Date added");
-      });
+      schedule.set("meetingName", meetingName);
+      schedule.set("meetingCost", meetingCost);
+      schedule.set("meetingMetadata", metadata);
+      // schedule.save().then(() => {
+      //   alert("new Date added");
+      // });
     }
   }
 
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
-
     const Schedule = Moralis.Object.extend("Schedules");
     const query = new Moralis.Query(Schedule);
     // query.equalTo("owner", user.get("ethAddress"));
-    query.equalTo("team", user.get("teamName"));
+    query.equalTo("tokenId", user.get("daoAddress"));
     query.find().then((result) => {
       setNewDate(result);
       console.log(result);
@@ -78,21 +118,59 @@ export default function Videocalls() {
               htmlFor="company-website"
               className="block text-sm font-medium text-gray-700"
             >
-              Add Date for {user.get("teamName")}
+              Add Meeting for {user.get("teamName")}
             </label>
             <div className="mt-1 rounded-md shadow-sm flex">
               <input
-                type="date"
+                type="datetime-local"
                 name="newDate"
                 id="newDate"
                 className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
               />
             </div>
+
+            <div className="mt-1 rounded-md shadow-sm flex">
+              <input
+                type="text"
+                name="meetingName"
+                id="meetingName"
+                placeholder="Title"
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+              />
+            </div>
+            <div className="mt-1 rounded-md shadow-sm flex">
+              <input
+                type="text"
+                name="meetingDescription"
+                id="meetingDescription"
+                placeholder="Description"
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+              />
+            </div>
+            <div className="mt-1 rounded-md shadow-sm flex">
+              <input
+                type="number"
+                name="meetingCost"
+                id="meetingCost"
+                placeholder="Cost"
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+              />
+            </div>
+            <div className="mt-1 rounded-md shadow-sm flex">
+              <input
+                type="file"
+                name="meetingFile"
+                id="meetingFile"
+                placeholder="Title"
+                className={` focus:ring-indigo-500 py-2 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none bg-transparent rounded-r-md sm:text-sm border-gray-300`}
+              />
+            </div>
+
             <button
               onClick={addDate}
               className={`mt-4 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             >
-              Add Date
+              Create Meeting
             </button>
           </div>
 
@@ -109,23 +187,6 @@ export default function Videocalls() {
             </div>
           </div>
         </div>
-      </div>
-      <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        {!isPro ? (
-          <button
-            // onClick={mintProSubscription}
-            className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Schedule Call
-          </button>
-        ) : (
-          <button
-            // onClick={saveInfo}
-            className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Save
-          </button>
-        )}
       </div>
     </div>
   );

@@ -6,17 +6,34 @@ export default function Videocalls() {
   const { user, Moralis } = useMoralis();
   const router = useRouter();
 
-  const [isPro, setIsPro] = useState(false);
+  const [room, setRoom] = useState("");
 
   function startCall(e) {
     e.preventDefault();
-    if (user.get("daoAddress")) {
-      // start call directly and invite all daoMembers
-      router.push("/videochat");
+
+    if (user.get("room") == null || "(undefined)") {
+      createRoom();
     } else {
+      router.push("/videochat");
       // send invites to particpant addresses.
     }
   }
+
+  const createRoom = async (e) => {
+    const result = await Moralis.Cloud.run("createMeeting", {
+      endDate: "2099-02-18T14:23:00.000Z",
+    });
+    setRoom(JSON.stringify(result.data));
+    if (result.status == 201) {
+      const Teams = new Moralis.Object.extend("Teams");
+      const teams = new Teams();
+      user.set("room", room);
+      user.save();
+      teams.set("room", room);
+      await teams.save();
+      router.push("/videochat");
+    }
+  };
 
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
@@ -72,9 +89,7 @@ export default function Videocalls() {
                 type="text"
                 name="member"
                 id="member"
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
               />
             </div>
             <div className="mt-1 rounded-md shadow-sm flex">
@@ -85,9 +100,7 @@ export default function Videocalls() {
                 type="text"
                 name="member1"
                 id="member1"
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
               />
             </div>
             <div className="mt-1 rounded-md shadow-sm flex">
@@ -98,9 +111,7 @@ export default function Videocalls() {
                 type="text"
                 name="member2"
                 id="member2"
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
               />
             </div>
             <div className="mt-1 rounded-md shadow-sm flex">
@@ -111,16 +122,12 @@ export default function Videocalls() {
                 type="text"
                 name="member3"
                 id="member3"
-                className={`${
-                  !isPro && "cursor-not-allowed"
-                } focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
+                className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
               />
             </div>
             <button
               type="button"
-              className={`mt-4 ${
-                !isPro && "cursor-not-allowed"
-              } bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+              className={`mt-4  bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             >
               Add Member
             </button>
