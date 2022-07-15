@@ -49,7 +49,7 @@ export default function Dashboard() {
                 selectedTab == tab.name
                   ? "bg-gray-50 text-indigo-700 hover:text-indigo-700 hover:bg-white"
                   : "text-gray-900 hover:text-gray-900 hover:bg-gray-50",
-                "group rounded-md px-3 py-2 flex items-center text-sm font-medium"
+                "group cursor-pointer rounded-md px-3 py-2 flex items-center text-sm font-medium"
               )}
               aria-current={tab.current ? "page" : undefined}
             >
