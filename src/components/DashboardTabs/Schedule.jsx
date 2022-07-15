@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import { useMoralis, useMoralisFile } from "react-moralis";
 import { NFTStorage } from "nft.storage";
+import {
+  MeetingContractAddress,
+  MeetingContractABI,
+} from "../Contracts/MeetingContract";
+import Notification from "../Notification";
+import { ethers } from "ethers";
 
 export default function Videocalls() {
   const {
@@ -10,6 +16,7 @@ export default function Videocalls() {
     isWeb3Enabled,
     isWeb3EnableLoading,
     enableWeb3,
+    web3,
   } = useMoralis();
   const { saveFile } = useMoralisFile();
 
@@ -20,6 +27,17 @@ export default function Videocalls() {
   const [newDate, setNewDate] = useState();
   const [isPro, setIsPro] = useState(true);
 
+  // NOTIFICATIONS functions
+  const [notificationTitle, setNotificationTitle] = useState();
+  const [notificationDescription, setNotificationDescription] = useState();
+  const [dialogType, setDialogType] = useState(1);
+
+  const [show, setShow] = useState(false);
+
+  const close = async () => {
+    setShow(false);
+  };
+
   async function addDate(e) {
     e.preventDefault();
     if (!isPro) {
@@ -28,7 +46,7 @@ export default function Videocalls() {
       // store new date
       const team = user.get("teamName");
       const tokenId = user.get("daoAddress");
-      const newDate = document.getElementById("newDate").value;
+      const meetingDate = document.getElementById("newDate").value;
       const meetingCost = document.getElementById("meetingCost").value;
       const meetingName = document.getElementById("meetingName").value;
       const meetingDescription =
@@ -38,7 +56,7 @@ export default function Videocalls() {
       let ipfsFile = "";
 
       if (meetingFile) {
-        console.log("uploading xibit file");
+        console.log("uploading meeting file");
         await saveFile("meetingFile", meetingFile, { saveIPFS: true }).then(
           async (hash) => {
             console.log(hash);
@@ -47,6 +65,7 @@ export default function Videocalls() {
         );
       }
 
+      // NFT STORAGE
       const metadata = await nftstorage.store({
         name: meetingName,
         description: meetingDescription,
@@ -57,25 +76,55 @@ export default function Videocalls() {
         },
       });
 
-      console.log(metadata.url);
-      console.log(metadata);
+      // TIME FORMATTING
+      const date = new Date(meetingDate);
+
+      // CONTRACT CALL
+
+      try {
+        const MeetingContract = new ethers.Contract(
+          MeetingContractAddress,
+          MeetingContractABI,
+          web3.getSigner()
+        );
+        let transaction = await MeetingContract.createMeeting(
+          meetingName,
+          metadata.url,
+          date.getTime(),
+          true,
+          meetingCost
+        );
+
+        await transaction.wait();
+        console.log(transaction);
+
+        const Schedule = new Moralis.Object.extend("Schedules");
+        const schedule = new Schedule();
+
+        schedule.set("team", team);
+        schedule.set("tokenId", tokenId);
+        schedule.set("meetingDate", meetingDate);
+        schedule.set("meetingName", meetingName);
+        schedule.set("meetingCost", meetingCost);
+        schedule.set("meetingFile", ipfsFile);
+        schedule.save().then(() => {
+          setDialogType(1); //Success
+          setNotificationTitle("Successful");
+          setNotificationDescription("Successfully Created.");
+          setShow(true);
+        });
+      } catch (error) {
+        setDialogType(2); // Failed
+        setNotificationTitle("Failed");
+        setNotificationDescription(error.message);
+        setShow(true);
+      }
 
       // save new Date in Moralis
-      const Schedule = new Moralis.Object.extend("Schedules");
-      const schedule = new Schedule();
-
-      schedule.set("team", team);
-      schedule.set("tokenId", tokenId);
-      schedule.set("newDate", newDate);
-      schedule.set("meetingName", meetingName);
-      schedule.set("meetingCost", meetingCost);
-      schedule.set("meetingMetadata", metadata);
-      // schedule.save().then(() => {
-      //   alert("new Date added");
-      // });
     }
   }
 
+  // QUERY CLASS "SCHEDULE" FROM MORALIS
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     const Schedule = Moralis.Object.extend("Schedules");
@@ -90,6 +139,13 @@ export default function Videocalls() {
 
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
+      <Notification
+        type={dialogType}
+        show={show}
+        close={close}
+        title={notificationTitle}
+        description={notificationDescription}
+      />
       <div className="bg-white py-6 px-4 space-y-6 sm:p-6">
         <div>
           <div>

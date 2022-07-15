@@ -6,8 +6,6 @@ export default function Videocalls() {
   const { user, Moralis } = useMoralis();
   const router = useRouter();
 
-  const [room, setRoom] = useState("");
-
   function startCall(e) {
     e.preventDefault();
 
@@ -19,6 +17,7 @@ export default function Videocalls() {
     }
   }
 
+  const [room, setRoom] = useState("");
   const createRoom = async (e) => {
     const result = await Moralis.Cloud.run("createMeeting", {
       endDate: "2099-02-18T14:23:00.000Z",
