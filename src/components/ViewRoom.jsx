@@ -1,24 +1,37 @@
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 
 export default function Videochat() {
-  const { user } = useMoralis();
+  const { user, Moralis } = useMoralis();
+  const router = useRouter();
 
-  const [room, setRoom] = useState();
+  const [room, setRoom] = useState([]);
+
+  const { id } = router.query;
 
   useEffect(() => {
-    if (user.get("room")) {
-      setRoom(JSON.parse(user.get("room")));
-    }
-  }, [user]);
+    const Schedules = new Moralis.Object.extend("Schedules");
+    const query = new Moralis.Query(Schedules);
+    query.equalTo("objectId", id);
+    query.first().then((result) => {
+      setRoom(result.get("room").data.hostRoomUrl);
+      console.log(room);
+    });
+    // alert("id");
+  }, []);
+
+  // useEffect(() => {
+  //   if (user.get("room")) {
+  //     setRoom(JSON.parse(user.get("room")));
+  //   }
+  // }, [user]);
 
   return (
     <div className="w-full items-center justify-center">
-      {JSON.stringify(room)}
-
       <iframe
         className="h-screen w-full"
-        src={room.roomUrl}
+        src={room}
         allow="camera; microphone; fullscreen; speaker; display-capture"
       ></iframe>
     </div>

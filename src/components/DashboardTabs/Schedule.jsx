@@ -7,6 +7,7 @@ import {
 } from "../Contracts/MeetingContract";
 import Notification from "../Notification";
 import { ethers } from "ethers";
+import ScheduleCard from "./ScheduleCard";
 
 export default function Videocalls() {
   const {
@@ -24,7 +25,7 @@ export default function Videocalls() {
     new NFTStorage({ token: process.env.REACT_APP_NFT_STORAGE_API_KEY })
   );
 
-  const [newDate, setNewDate] = useState();
+  const [newDate, setNewDate] = useState([]);
   const [isPro, setIsPro] = useState(true);
 
   // NOTIFICATIONS functions
@@ -33,6 +34,7 @@ export default function Videocalls() {
   const [dialogType, setDialogType] = useState(1);
 
   const [show, setShow] = useState(false);
+  const [room, setRoom] = useState("");
 
   const close = async () => {
     setShow(false);
@@ -98,9 +100,15 @@ export default function Videocalls() {
         await transaction.wait();
         console.log(transaction);
 
+        const result = await Moralis.Cloud.run("createMeeting", {
+          endDate: "2099-02-18T14:23:00.000Z",
+        });
+
+        console.log(result.data);
+
         const Schedule = new Moralis.Object.extend("Schedules");
         const schedule = new Schedule();
-
+        schedule.set("room", result);
         schedule.set("team", team);
         schedule.set("tokenId", tokenId);
         schedule.set("meetingDate", meetingDate);
@@ -119,8 +127,6 @@ export default function Videocalls() {
         setNotificationDescription(error.message);
         setShow(true);
       }
-
-      // save new Date in Moralis
     }
   }
 
@@ -129,8 +135,6 @@ export default function Videocalls() {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     const Schedule = Moralis.Object.extend("Schedules");
     const query = new Moralis.Query(Schedule);
-    // query.equalTo("owner", user.get("ethAddress"));
-    query.equalTo("tokenId", user.get("daoAddress"));
     query.find().then((result) => {
       setNewDate(result);
       console.log(result);
@@ -236,10 +240,17 @@ export default function Videocalls() {
               Upcoming Dates
             </label>
             <div className="mt-1 rounded-md shadow-sm flex">
-              <span className="bg-gray-50 mb-2 h-10 border border-gray-300 rounded-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
+              {newDate.map((data, index) => {
+                return (
+                  <ScheduleCard data={data} key={index} />
+                  // <span className="bg-gray-50 mb-2 h-10 border border-gray-300 rounded-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
+                  //   {data.get("meetingDate")}
+                  // </span>
+                );
+              })}
+              {/* <span className="bg-gray-50 mb-2 h-10 border border-gray-300 rounded-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
                 20.07.2022
-                {/* QUERY UPCOMING DATES */}
-              </span>
+              </span> */}
             </div>
           </div>
         </div>

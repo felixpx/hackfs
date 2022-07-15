@@ -6,6 +6,9 @@ import { MoralisDappProvider } from "../src/providers/MoralisDappProvider/Morali
 const APP_ID = "exW1tdLP6HIC7SFX7WTySWgkHziZVShwA0DZxNlg";
 const SERVER_URL = "https://govdtsjcruxd.usemoralis.com:2053/server";
 
+// const APP_ID = NEXT_APP_MORALIS_SERVER_URL
+// const SERVER_URL = NEXT_APP_MORALIS_APP_ID
+
 function Hackfs({ Component, pageProps }: AppProps) {
   const isServerInfo = APP_ID && SERVER_URL ? true : false;
   //validate

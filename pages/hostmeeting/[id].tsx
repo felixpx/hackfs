@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Login from "../src/components/Login";
-import ViewRoom from "../src/components/ViewRoom";
-import Header from "../src/components/Header";
+import Login from "../../src/components/Login";
+import ViewRoom from "../../src/components/ViewRoom";
+import Header from "../../src/components/Header";
 import { useMoralis } from "react-moralis";
 
 const Home: NextPage = () => {
