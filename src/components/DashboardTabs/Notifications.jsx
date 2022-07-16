@@ -1,9 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMoralis } from "react-moralis";
 
 import Notif from "../Notif";
+import NotificationList from "../NotificationList";
 
 export default function Videocalls() {
-  const [isPro, setIsPro] = useState(false);
+  const {
+    user,
+    isAuthenticated,
+    enableWeb3,
+    isWeb3Enabled,
+    isWeb3EnableLoading,
+    Moralis,
+  } = useMoralis();
+  const [notifications, setNotifications] = useState([]);
+
+  // SCHEDULE TIMES
+  useEffect(() => {
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+    const Schedule = Moralis.Object.extend("Schedules");
+    const query = new Moralis.Query(Schedule);
+    query.find().then((result) => {
+      setNotifications(result);
+      console.log(result);
+    });
+  }, [user]);
 
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
@@ -27,25 +48,9 @@ export default function Videocalls() {
             <br></br>
           </div>
         </div>
-
-        <Notif />
-      </div>
-      <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        {!isPro ? (
-          <button
-            // onClick={mintProSubscription}
-            className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Start Videocall
-          </button>
-        ) : (
-          <button
-            // onClick={saveInfo}
-            className="bg-indigo-600 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Save
-          </button>
-        )}
+        {notifications.map((data, index) => {
+          return <NotificationList data={data} key={index} />;
+        })}
       </div>
     </div>
   );
