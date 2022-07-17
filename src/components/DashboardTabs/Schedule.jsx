@@ -42,7 +42,7 @@ export default function Videocalls(props) {
   };
 
   async function sendNotifications(data) {
-    Moralis.Cloud.run("getUsers", { address: user.get("ethAddress") }).then(
+    Moralis.Cloud.run("getUser", { address: user.get("ethAddress") }).then(
       (results) => {
         results.forEach((result) => {
           const Message = new Moralis.Object.extend("Notifications");
@@ -50,7 +50,7 @@ export default function Videocalls(props) {
           message.set("from", user.get("ethAddress"));
           message.set("to", result.id);
           message.set("meetingName", data.get("meetingName"));
-          message.set("meetingDate", data.get("meetingDate"));
+          message.set("meetingDate", new Date(data.get("meetingDate")));
           message.set("meetingFile", data.get("meetingFile"));
           message.set("meetingTitle", data.get("meetingTitle"));
           message.set("meetingDescription", data.get("meetingDescription"));

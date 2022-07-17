@@ -13,7 +13,6 @@ import {
 import { ethers } from "ethers";
 import { useMoralis } from "react-moralis";
 import Notification from "./Notification";
-import { set } from "date-fns";
 
 const applications = [
   {
@@ -82,6 +81,9 @@ export default function NotificationList(props) {
   const messageSender =
     props.data.get("from").slice(0, 4).concat("...") +
     props.data.get("from").slice(38, 44);
+
+  const date = props.data.get("meetingDate").toString();
+
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
       <Notification
@@ -123,7 +125,7 @@ export default function NotificationList(props) {
                           {props.data.get("meetingName")}
                         </p>
                         <p className="mt-2 flex items-center text-sm text-gray-500">
-                          {props.data.get("meetingDescription")}
+                          {date}
                         </p>
                       </div>
                     </div>
