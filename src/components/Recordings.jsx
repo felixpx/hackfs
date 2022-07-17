@@ -1,39 +1,27 @@
 import { useRef } from "react";
 import { useMoralis } from "react-moralis";
-import UploadVideo from "../components/UploadVideo";
-import RecordingNavTab from "../components/RecordingNavTab";
-
-const files = [
-  {
-    title: "Meeting 31",
-    size: "18.07.2022 - 4PM",
-    source:
-      "https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80",
-  },
-  {
-    title: "Meeting 57",
-    size: "22.07.2022 - 6PM",
-    source:
-      "https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80",
-  },
-  {
-    title: "Meeting 27",
-    size: "22.07.2022 - 6PM",
-    source:
-      "https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80",
-  },
-  {
-    title: "Meeting 17",
-    size: "22.07.2022 - 6PM",
-    source:
-      "https://images.unsplash.com/photo-1582053433976-25c00369fc93?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=512&q=80",
-  },
-];
+import { MeetingContractAddress } from "../../src/components/Contracts/MeetingContract";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function Recordings() {
-  const { Moralis, user } = useMoralis();
-  const videoUrl = useRef();
+  const { Moralis } = useMoralis();
+  const router = useRouter();
+
   const videoRef = useRef();
+  const videoUrl = useRef();
+  const [data, setData] = useState();
+  const { id } = router.query;
+
+  useEffect(() => {
+    const Schedules = new Moralis.Object.extend("Schedules");
+    const query = new Moralis.Query(Schedules);
+    query.equalTo("objectId", id);
+    query.first().then((result) => {
+      setData(result);
+      console.log(room);
+    });
+  }, []);
 
   return (
     <div>
@@ -52,7 +40,7 @@ export default function Recordings() {
         role="list"
         className="pb-16 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 sm:gap-x-6 lg:grid-cols-4 xl:gap-x-8"
       >
-        {files.map((file) => (
+        {data.map((file) => (
           <li key={file.source} className="relative">
             <div className="group block w-full aspect-w-10 aspect-h-7 rounded-lg bg-gray-100 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-offset-gray-100 focus-within:ring-indigo-500 overflow-hidden">
               <img

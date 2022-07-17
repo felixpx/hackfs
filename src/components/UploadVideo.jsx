@@ -1,6 +1,121 @@
+import { MeetingContractAddress } from ".././components/Contracts/MeetingContract";
+import { useRouter } from "next/router";
+import { useEffect, useRef, useState } from "react";
+import { useMoralis } from "react-moralis";
+import LitJsSdk from "lit-js-sdk";
+import { Web3Storage, File } from "web3.storage";
+import Notification from "../../src/components/Notification";
+
+const client = new LitJsSdk.LitNodeClient();
+
 export default function UploadVideo() {
+  const { Moralis } = useMoralis();
+  const router = useRouter();
+
+  const [notificationTitle, setNotificationTitle] = useState();
+  const [notificationDescription, setNotificationDescription] = useState();
+  const [dialogType, setDialogType] = useState(1);
+
+  const [show, setShow] = useState(false);
+  const close = async () => {
+    setShow(false);
+  };
+
+  const videoUrl = useRef();
+  const videoRef = useRef();
+
+  const [data, setData] = useState();
+  const { id } = router.query;
+
+  const [storage] = useState(
+    new Web3Storage({ token: process.env.REACT_APP_WEB3_STORAGE_KEY })
+  );
+
+  useEffect(() => {
+    const Schedules = new Moralis.Object.extend("Schedules");
+    const query = new Moralis.Query(Schedules);
+    query.equalTo("objectId", id);
+    query.first().then((result) => {
+      setData(result);
+    });
+  }, []);
+
+  useEffect(() => {
+    async function getClient() {
+      await client.connect();
+      window.litNodeClient = client;
+    }
+    getClient();
+  }, []);
+
+  const uploadVideo = async (e) => {
+    e.preventDefault();
+
+    const accessControlConditions = [
+      {
+        contractAddress: MeetingContractAddress,
+        standardContractType: "ERC1155",
+        chain: "mumbai",
+        method: "balanceOf",
+        parameters: [":userAddress", data.get("tokenId")],
+        returnValueTest: {
+          comparator: ">",
+          value: "0",
+        },
+      },
+    ];
+    const videoFile = document.getElementById("file-upload").files;
+    if (videoFile.length <= 0) {
+      setDialogType(2); //Error
+      setNotificationTitle("Error");
+      setNotificationDescription("Error no file selected.");
+      setShow(true);
+    }
+
+    const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: "mumbai" });
+    const files = await LitJsSdk.zipAndEncryptFiles(videoFile);
+    console.log(videoFile);
+    console.log(files);
+
+    const symmetricKey = files.symmetricKey;
+
+    const encryptedSymmetricKey = await window.litNodeClient.saveEncryptionKey({
+      accessControlConditions,
+      symmetricKey,
+      authSig,
+      chain: "mumbai",
+    });
+    console.log(files.encryptedZip);
+    //Get File data
+    const fdata = await files.encryptedZip;
+
+    //Upload file to web3.storage
+    const cid = await storage.put([new File([fdata], videoFile.name)]);
+    const CallRecording = new Moralis.Object.extend("CallRecordings");
+    const recording = new CallRecording();
+    recording.set("tokenId", data.get("tokenId"));
+    recording.set("cId", cid);
+    recording.set("videoFile", videoFile[0].name);
+    recording.set(
+      "key",
+      LitJsSdk.uint8arrayToString(encryptedSymmetricKey, "base16")
+    );
+    recording.save().then((rec) => {
+      setDialogType(1); //Successful
+      setNotificationTitle("Recording Saved");
+      setNotificationDescription("Successfully saved recording.");
+      setShow(true);
+    });
+  };
   return (
     <form className="space-y-8 divide-y divide-gray-200">
+      <Notification
+        type={dialogType}
+        show={show}
+        close={close}
+        title={notificationTitle}
+        description={notificationDescription}
+      />
       <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
         <div>
           <div>
@@ -84,13 +199,7 @@ export default function UploadVideo() {
       <div className="pt-5">
         <div className="flex justify-end">
           <button
-            type="button"
-            className="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
+            onClick={uploadVideo}
             className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Save

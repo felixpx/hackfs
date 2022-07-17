@@ -38,7 +38,7 @@ export default function Example() {
       </div>
       <div className=" hidden sm:block">
         <nav
-          className="absolute top-12 items-center z-0 rounded-lg shadow flex divide-x divide-gray-200"
+          className="absolute top-24 items-center z-0 rounded-lg shadow flex divide-x divide-gray-200"
           aria-label="Tabs"
         >
           {tabs.map((tab, tabIdx) => (
@@ -69,9 +69,7 @@ export default function Example() {
           ))}
         </nav>
       </div>
-      <div hidden={selectedTab != "Recordings"}>
-        <Recordings />
-      </div>
+      <div hidden={selectedTab != "Recordings"}>{/* <Recordings /> */}</div>
       <div hidden={selectedTab != "Upload"}>
         <UploadVideo />
       </div>
