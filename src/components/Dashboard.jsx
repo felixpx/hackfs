@@ -36,6 +36,12 @@ function classNames(...classes) {
 export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState("Pro");
   const xmtpClient = useRef()
+  const [showMessage, setShowMessage] = useState(false);
+  const [data,setData] = useState()
+  const closeMessage = async () => {
+    setShowMessage(false);
+  };
+ 
   const {
     user,
     isAuthenticated,
@@ -44,6 +50,18 @@ export default function Dashboard() {
     enableWeb3,
     web3,
   } = useMoralis();
+
+  async function startNotifications(){
+    
+    for (const conversation of await xmtpClient.current.conversations.list()) {
+      for await (const message of await conversation.streamMessages()) {
+        if (message.senderAddress != xmtpClient.current.address) {
+          setData(JSON.load(message.text))
+          setShowMessage(true)
+          continue
+        }
+    }
+  }
   useEffect(()=>{
     async function setupXMTP(){
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
@@ -105,6 +123,13 @@ export default function Dashboard() {
           <Poaps />
         </div>
       </div>
+      <Notification
+        
+        show={showMessage}
+        close={closeMessage}
+        data = {data} 
+      />
     </div>
   );
+}
 }
