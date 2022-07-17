@@ -6,7 +6,7 @@ import {
   UserGroupIcon,
   VideoCameraIcon,
 } from "@heroicons/react/outline";
-import {useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MyMessage from "./Message";
 import Pro from "./DashboardTabs/Pro";
 import Videocalls from "./DashboardTabs/Videocalls";
@@ -14,7 +14,7 @@ import Notifications from "./DashboardTabs/Notifications";
 import Schedule from "./DashboardTabs/Schedule";
 import Archive from "./DashboardTabs/Archive";
 import Poaps from "./DashboardTabs/Poaps";
-import { Client } from '@xmtp/xmtp-js'
+import { Client } from "@xmtp/xmtp-js";
 import { useMoralis } from "react-moralis";
 const navigation = [
   { name: "Pro", href: "#", icon: PlusCircleIcon, current: true },
@@ -35,13 +35,13 @@ function classNames(...classes) {
 
 export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState("Pro");
-  const xmtpClient = useRef()
+  const xmtpClient = useRef();
   const [showMessage, setShowMessage] = useState(false);
-  const [data,setData] = useState()
+  const [data, setData] = useState();
   const closeMessage = async () => {
     setShowMessage(false);
   };
- 
+
   const {
     user,
     isAuthenticated,
@@ -51,26 +51,29 @@ export default function Dashboard() {
     web3,
   } = useMoralis();
 
-  async function startNotifications(){
-    
+  async function startNotifications() {
     for (const conversation of await xmtpClient.current.conversations.list()) {
       for await (const message of await conversation.streamMessages()) {
         if (message.senderAddress != xmtpClient.current.address) {
-          setData(JSON.load(message.text))
-          setShowMessage(true)
-          continue
+          setData(JSON.load(message.text));
+          setShowMessage(true);
+          // console.log(message.text);
+          continue;
         }
+      }
     }
   }
-}
-  useEffect(()=>{
-    async function setupXMTP(){
-    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
-    if(user && xmtpClient.current == null && web3)
-       xmtpClient.current = await Client.create(web3.getSigner())
+  useEffect(() => {
+    async function setupXMTP() {
+      if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
+        enableWeb3();
+      if (user && xmtpClient.current == null && web3) {
+        xmtpClient.current = await Client.create(web3.getSigner());
+        xmtpClient.current = startNotifications();
+      }
     }
-    setupXMTP()   
-  },[user,web3])
+    setupXMTP();
+  }, [user, web3]);
 
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
@@ -125,12 +128,7 @@ export default function Dashboard() {
           <Poaps />
         </div>
       </div>
-      <MyMessage
-        
-        show={showMessage}
-        close={closeMessage}
-        data = {data} 
-      />
+      <MyMessage show={showMessage} close={closeMessage} data={data} />
     </div>
   );
 }
