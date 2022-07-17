@@ -6,7 +6,7 @@ import {
   UserGroupIcon,
   VideoCameraIcon,
 } from "@heroicons/react/outline";
-import { useState } from "react";
+import {useEffect, useRef, useState } from "react";
 
 import Pro from "./DashboardTabs/Pro";
 import Videocalls from "./DashboardTabs/Videocalls";
@@ -14,7 +14,8 @@ import Notifications from "./DashboardTabs/Notifications";
 import Schedule from "./DashboardTabs/Schedule";
 import Archive from "./DashboardTabs/Archive";
 import Poaps from "./DashboardTabs/Poaps";
-
+import { Client } from '@xmtp/xmtp-js'
+import { useMoralis } from "react-moralis";
 const navigation = [
   { name: "Pro", href: "#", icon: PlusCircleIcon, current: true },
   { name: "Videocalls", href: "#", icon: VideoCameraIcon, current: false },
@@ -34,7 +35,23 @@ function classNames(...classes) {
 
 export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState("Pro");
-
+  const xmtpClient = useRef()
+  const {
+    user,
+    isAuthenticated,
+    isWeb3Enabled,
+    isWeb3EnableLoading,
+    enableWeb3,
+    web3,
+  } = useMoralis();
+  useEffect(()=>{
+    async function setupXMTP(){
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+    if(user && xmtpClient.current == null && web3)
+       xmtpClient.current = await Client.create(web3.getSigner())
+    }
+    setupXMTP()   
+  },[user,web3])
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
       <aside className="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
@@ -79,7 +96,7 @@ export default function Dashboard() {
           <Notifications />
         </div>
         <div hidden={selectedTab != "Schedule"}>
-          <Schedule />
+          <Schedule xmtpClient={xmtpClient} />
         </div>
         <div hidden={selectedTab != "Archive"}>
           <Archive />

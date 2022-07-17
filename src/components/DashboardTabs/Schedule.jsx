@@ -35,10 +35,49 @@ export default function Videocalls() {
 
   const [show, setShow] = useState(false);
   const [room, setRoom] = useState("");
+  const [search,setSearch]  = useState(new Date())
 
   const close = async () => {
     setShow(false);
   };
+  
+  async function sendNotifications (data)
+  {
+       
+       Moralis.Cloud.run('getUsers',{address:user.get("ethAddress")}).then((results)=>{
+        results.forEach((result) =>{
+          const Message = new Moralis.Object.extend("Notifications");
+          const  message = new Message();
+          message.set("from",user.get("ethAddress"))
+          message.set("to",result.id) 
+          message.set("meetingName",data.get("meetingName"))
+          message.set("meetingDate",data.get("meetingDate"))
+          message.set("meetingFile",data.get("meetingFile"))
+          message.set("meetingTitle",data.get("meetingTitle"))
+          message.set("meetingDescription",data.get("meetingDescription"))       
+          message.set("tokenId",data.tokenId)
+          message.set("team",(data.get("team") ? data.get("team") : user.get("ethAddress") )) 
+          message.set("room",data.get("room"))    
+          message.save().then(async (meeting) =>{
+           const address=  ethers.utils.getAddress(meeting.get("to"))
+           const conversation = await props.xmtpClient.conversations.newConversation(
+            address
+          )
+          // Send a message
+          try{
+          await conversation.send(JSON.stringify(meeting))
+          }
+          catch(error)
+          {
+
+          }    
+        })
+        })
+            
+          
+       })
+       
+  }
 
   async function addDate(e) {
     e.preventDefault();
@@ -47,7 +86,7 @@ export default function Videocalls() {
     } else {
       // store new date
       const team = user.get("teamName");
-      const tokenId = user.get("daoAddress");
+      let tokenId;
       const meetingDate = document.getElementById("newDate").value;
       const meetingCost = document.getElementById("meetingCost").value;
       const meetingName = document.getElementById("meetingName").value;
@@ -81,6 +120,7 @@ export default function Videocalls() {
       // TIME FORMATTING
       const date = new Date(meetingDate);
 
+ 
       // CONTRACT CALL
 
       try {
@@ -97,8 +137,16 @@ export default function Videocalls() {
           meetingCost
         );
 
-        await transaction.wait();
-        console.log(transaction);
+       const receipt =  await transaction.wait();
+       // console.log(receipt.logs)
+       let abi = ["event MeetingCreated(uint256 tokenId,string name,address owner,uint256 dateCreated,uint256 startDate,bool isPublic,uint256 cost)"];
+
+        let iface = new ethers.utils.Interface(abi);
+        let log = iface.parseLog(receipt.logs[0]); // here you can add your own logic to find the correct log
+        console.log(log.args)
+
+        tokenId = log.args.tokenId.toString()
+        console.log(tokenId);
 
         const result = await Moralis.Cloud.run("createMeeting", {
           endDate: "2099-02-18T14:23:00.000Z",
@@ -115,11 +163,14 @@ export default function Videocalls() {
         schedule.set("meetingName", meetingName);
         schedule.set("meetingCost", meetingCost);
         schedule.set("meetingFile", ipfsFile);
-        schedule.save().then(() => {
+        schedule.set("user",user.id)
+        schedule.save().then((data) => {
           setDialogType(1); //Success
           setNotificationTitle("Successful");
           setNotificationDescription("Successfully Created.");
           setShow(true);
+          setSearch(new Date())
+          sendNotifications(data)
         });
       } catch (error) {
         setDialogType(2); // Failed
@@ -135,11 +186,13 @@ export default function Videocalls() {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     const Schedule = Moralis.Object.extend("Schedules");
     const query = new Moralis.Query(Schedule);
+    query.equalTo("user",user.id)
+    query.descending("meetingDate")
     query.find().then((result) => {
       setNewDate(result);
       console.log(result);
     });
-  }, [user]);
+  }, [user,search]);
 
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
@@ -234,15 +287,19 @@ export default function Videocalls() {
             </button>
           </div>
 
-          {/* Members */}
-          <div className="col-span-3 sm:col-span-2">
-            <label className="block text-sm font-medium text-gray-700">
+         
+        </div>
+      </div>
+       {/* Members */}
+            <label className="ml-2 block text-sm font-medium text-gray-700">
               Upcoming Dates
             </label>
-            <div className="mt-1 rounded-md shadow-sm flex">
+            <ul role="list" className="m-2 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2">
+
               {newDate.map((data, index) => {
                 return (
                   <ScheduleCard data={data} key={index} />
+                  
                   // <span className="bg-gray-50 mb-2 h-10 border border-gray-300 rounded-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
                   //   {data.get("meetingDate")}
                   // </span>
@@ -251,10 +308,8 @@ export default function Videocalls() {
               {/* <span className="bg-gray-50 mb-2 h-10 border border-gray-300 rounded-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
                 20.07.2022
               </span> */}
-            </div>
+            </ul>
           </div>
-        </div>
-      </div>
-    </div>
+
   );
 }
