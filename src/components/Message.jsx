@@ -4,9 +4,8 @@ import { Transition } from "@headlessui/react";
 import { CheckCircleIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { XIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import Message from "../Message";
 
-export default function Message(props) {
+export default function MyMessage(props) {
   const router = useRouter();
   
   const [showMessage, setShowMessage] = useState(false);
@@ -32,7 +31,7 @@ export default function Message(props) {
       <div className="w-full flex flex-col items-center space-y-4 sm:items-end">
         {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
         <Transition
-          show={show}
+          show={showMessage}
           as={Fragment}
           enter="transform ease-out duration-300 transition"
           enterFrom="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"

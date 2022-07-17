@@ -7,7 +7,7 @@ import {
   VideoCameraIcon,
 } from "@heroicons/react/outline";
 import {useEffect, useRef, useState } from "react";
-
+import MyMessage from "./Message";
 import Pro from "./DashboardTabs/Pro";
 import Videocalls from "./DashboardTabs/Videocalls";
 import Notifications from "./DashboardTabs/Notifications";
@@ -62,6 +62,7 @@ export default function Dashboard() {
         }
     }
   }
+}
   useEffect(()=>{
     async function setupXMTP(){
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
@@ -70,6 +71,7 @@ export default function Dashboard() {
     }
     setupXMTP()   
   },[user,web3])
+
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
       <aside className="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
@@ -123,7 +125,7 @@ export default function Dashboard() {
           <Poaps />
         </div>
       </div>
-      <Notification
+      <MyMessage
         
         show={showMessage}
         close={closeMessage}
@@ -131,5 +133,4 @@ export default function Dashboard() {
       />
     </div>
   );
-}
 }
