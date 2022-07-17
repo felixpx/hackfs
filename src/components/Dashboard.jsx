@@ -69,12 +69,14 @@ export default function Dashboard() {
         enableWeb3();
       if (user && xmtpClient == null && web3) {
         setXmtpClient(await Client.create(web3.getSigner()));
-        startNotifications();
       }
     }
     setupXMTP();
   }, [user, web3]);
 
+  useEffect(() => {
+    if (xmtpClient?.conversations) startNotifications();
+  }, [xmtpClient?.conversations]);
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
       <aside className="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">

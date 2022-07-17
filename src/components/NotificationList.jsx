@@ -40,7 +40,7 @@ export default function NotificationList(props) {
   const [dialogType, setDialogType] = useState(1);
 
   const [show, setShow] = useState(false);
-  const [join, setJoin] = useState("");
+  const [join, setJoin] = useState(props.data.get("accepted"));
 
   const close = async () => {
     setShow(false);
@@ -61,6 +61,10 @@ export default function NotificationList(props) {
         setNotificationTitle("Successful");
         setNotificationDescription("Successfully Minted.");
         setShow(true);
+
+        props.data.set("accepted", true);
+        props.data.save();
+
         setJoin(true);
       } catch (error) {
         setDialogType(2); // Failed
