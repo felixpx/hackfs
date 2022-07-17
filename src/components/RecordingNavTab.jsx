@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMoralis } from "react-moralis";
 import Recordings from "./Recordings";
 import UploadVideo from "./UploadVideo";
@@ -18,6 +18,11 @@ export default function Example() {
   const videoRef = useRef();
   const [selectedTab, setSelectedTab] = useState("Recordings");
 
+  const [search, setSearch] = useState(new Date());
+
+  const updateSearch = async () => {
+    setSearch(new Date());
+  };
   return (
     <div className="bg-[#f5f5f5] p-18 h-screen flex flex-col items-center justify-center rounded-xl w-full sm:w-9/12 shadow-xl">
       <div className="sm:hidden">
@@ -70,10 +75,10 @@ export default function Example() {
         </nav>
       </div>
       <div hidden={selectedTab != "Recordings"}>
-        <Recordings />
+        <Recordings search={search} />
       </div>
       <div hidden={selectedTab != "Upload"}>
-        <UploadVideo />
+        <UploadVideo updateSearch={updateSearch} />
       </div>
     </div>
   );

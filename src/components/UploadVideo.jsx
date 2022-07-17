@@ -8,7 +8,7 @@ import Notification from "../../src/components/Notification";
 
 const client = new LitJsSdk.LitNodeClient();
 
-export default function UploadVideo() {
+export default function UploadVideo(props) {
   const { Moralis } = useMoralis();
   const router = useRouter();
 
@@ -105,6 +105,7 @@ export default function UploadVideo() {
       setNotificationTitle("Recording Saved");
       setNotificationDescription("Successfully saved recording.");
       setShow(true);
+      props.updateSearch();
     });
   };
   return (

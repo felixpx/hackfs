@@ -3,8 +3,12 @@ import { useMoralis } from "react-moralis";
 import { MeetingContractAddress } from "../../src/components/Contracts/MeetingContract";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { Web3Storage, File } from "web3.storage";
+import LitJsSdk from "lit-js-sdk";
 
-export default function Recordings() {
+const client = new LitJsSdk.LitNodeClient();
+
+export default function Recordings(props) {
   const { Moralis } = useMoralis();
   const router = useRouter();
 
@@ -15,6 +19,10 @@ export default function Recordings() {
   const { id } = router.query;
 
   const [recordings, setRecordings] = useState([]);
+
+  const [storage] = useState(
+    new Web3Storage({ token: process.env.REACT_APP_WEB3_STORAGE_KEY })
+  );
 
   useEffect(() => {
     const Schedules = new Moralis.Object.extend("Schedules");
@@ -34,9 +42,51 @@ export default function Recordings() {
         setRecordings(result);
       });
     }
-  }, [data]);
+  }, [data, props.setSelectedTab]);
 
-  async function downloadFile() {}
+  useEffect(() => {
+    async function getClient() {
+      await client.connect();
+      window.litNodeClient = client;
+    }
+    getClient();
+  }, []);
+
+  const downloadVideo = async (video) => {
+    const accessControlConditions = [
+      {
+        contractAddress: MeetingContractAddress,
+        standardContractType: "ERC1155",
+        chain: "mumbai",
+        method: "balanceOf",
+        parameters: [":userAddress", data.get("tokenId")],
+        returnValueTest: {
+          comparator: ">",
+          value: "0",
+        },
+      },
+    ];
+    const res = await storage.get(video.get("cId"));
+
+    const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: "mumbai" });
+    const symmetricKey = await window.litNodeClient.getEncryptionKey({
+      accessControlConditions,
+      toDecrypt: video.get("key"),
+      chain: "mumbai",
+      authSig,
+    });
+    const web3Files = await res.files();
+
+    const files = await LitJsSdk.decryptZip(web3Files[0], symmetricKey);
+
+    videoUrl.current = window.URL.createObjectURL(
+      await files[`encryptedAssets/${video.get("videoFile")}`].async("blob")
+    );
+    videoRef.current.src = videoUrl.current;
+    //videoRef.current.type ="video/webm";
+
+    videoRef.current?.load();
+  };
 
   return (
     <div>
@@ -64,7 +114,9 @@ export default function Recordings() {
                 className="object-cover pointer-events-none group-hover:opacity-75"
               />
               <button
-                onClick={downloadFile}
+                onClick={() => {
+                  downloadVideo(info);
+                }}
                 type="button"
                 className="absolute inset-0 focus:outline-none"
               >
