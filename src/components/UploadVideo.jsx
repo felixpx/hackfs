@@ -74,8 +74,8 @@ export default function UploadVideo() {
 
     const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: "mumbai" });
     const files = await LitJsSdk.zipAndEncryptFiles(videoFile);
-    console.log(videoFile);
-    console.log(files);
+    // console.log(videoFile);
+    // console.log(files);
 
     const symmetricKey = files.symmetricKey;
 
@@ -85,7 +85,7 @@ export default function UploadVideo() {
       authSig,
       chain: "mumbai",
     });
-    console.log(files.encryptedZip);
+    // console.log(files.encryptedZip);
     //Get File data
     const fdata = await files.encryptedZip;
 

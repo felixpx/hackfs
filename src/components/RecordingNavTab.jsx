@@ -69,7 +69,9 @@ export default function Example() {
           ))}
         </nav>
       </div>
-      <div hidden={selectedTab != "Recordings"}>{/* <Recordings /> */}</div>
+      <div hidden={selectedTab != "Recordings"}>
+        <Recordings />
+      </div>
       <div hidden={selectedTab != "Upload"}>
         <UploadVideo />
       </div>
