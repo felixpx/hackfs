@@ -9,7 +9,7 @@ import Notification from "../Notification";
 import { ethers } from "ethers";
 import ScheduleCard from "./ScheduleCard";
 
-export default function Schedule(props) {
+export default function Videocalls(props) {
   const {
     Moralis,
     user,
@@ -42,16 +42,15 @@ export default function Schedule(props) {
   };
 
   async function sendNotifications(data) {
-    Moralis.Cloud.run("getUser", { address: user.get("ethAddress") }).then(
+    Moralis.Cloud.run("getUsers", { address: user.get("ethAddress") }).then(
       (results) => {
-        console.log(data);
         results.forEach((result) => {
           const Message = new Moralis.Object.extend("Notifications");
           const message = new Message();
           message.set("from", user.get("ethAddress"));
           message.set("to", result.id);
           message.set("meetingName", data.get("meetingName"));
-          message.set("meetingDate", new Date(data.get("meetingDate")));
+          message.set("meetingDate", data.get("meetingDate"));
           message.set("meetingFile", data.get("meetingFile"));
           message.set("meetingTitle", data.get("meetingTitle"));
           message.set("meetingDescription", data.get("meetingDescription"));
@@ -64,10 +63,7 @@ export default function Schedule(props) {
           message.save().then(async (meeting) => {
             const address = ethers.utils.getAddress(meeting.get("to"));
             const conversation =
-              // await props.xmtpClient.current.conversations.newConversation(
-              //   address
-              // );
-              await props.xmtp.conversation.newConversation(address);
+              await props.xmtpClient.conversations.newConversation(address);
             // Send a message
             try {
               await conversation.send(JSON.stringify(meeting));
@@ -190,9 +186,10 @@ export default function Schedule(props) {
     query.descending("meetingDate");
     query.find().then((result) => {
       setNewDate(result);
+      console.log(result);
     });
   }, [user, search]);
-
+  console.log(props.xmtpClient?.conversations);
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
       <Notification
@@ -297,7 +294,7 @@ export default function Schedule(props) {
       >
         {newDate.map((data, index) => {
           return (
-            <ScheduleCard data={data} key={index} id={index} />
+            <ScheduleCard data={data} key={index} />
 
             // <span className="bg-gray-50 mb-2 h-10 border border-gray-300 rounded-md px-3 inline-flex items-center text-gray-500 sm:text-sm">
             //   {data.get("meetingDate")}

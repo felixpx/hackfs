@@ -19,12 +19,12 @@ import { useMoralis } from "react-moralis";
 const navigation = [
   { name: "Pro", href: "#", icon: PlusCircleIcon, current: true },
   { name: "Videocalls", href: "#", icon: VideoCameraIcon, current: false },
-  { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
   {
     name: "Notifications",
     icon: InboxIcon,
     current: false,
   },
+  { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
   { name: "Archive", href: "#", icon: ArchiveIcon, current: false },
   { name: "Poaps", href: "#", icon: UserGroupIcon, current: false },
 ];
@@ -35,7 +35,7 @@ function classNames(...classes) {
 
 export default function Dashboard() {
   const [selectedTab, setSelectedTab] = useState("Pro");
-  const xmtpClient = useRef();
+  const [xmtpClient, setXmtpClient] = useState();
   const [showMessage, setShowMessage] = useState(false);
   const [data, setData] = useState();
   const closeMessage = async () => {
@@ -52,12 +52,12 @@ export default function Dashboard() {
   } = useMoralis();
 
   async function startNotifications() {
-    for (const conversation of await xmtpClient.current.conversations.list()) {
+    for (const conversation of await xmtpClient.conversations.list()) {
       for await (const message of await conversation.streamMessages()) {
-        if (message.senderAddress != xmtpClient.current.address) {
-          setData(JSON.load(message.text));
-          setShowMessage(true);
-          // console.log(message.text);
+        if (message.senderAddress != xmtpClient.address) {
+          // setData(JSON.load(message.text))
+          //setShowMessage(true)
+          console.log(message.text);
           continue;
         }
       }
@@ -67,9 +67,9 @@ export default function Dashboard() {
     async function setupXMTP() {
       if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading)
         enableWeb3();
-      if (user && xmtpClient.current == null && web3) {
-        xmtpClient.current = await Client.create(web3.getSigner());
-        xmtpClient.current = startNotifications();
+      if (user && xmtpClient == null && web3) {
+        setXmtpClient(await Client.create(web3.getSigner()));
+        startNotifications();
       }
     }
     setupXMTP();

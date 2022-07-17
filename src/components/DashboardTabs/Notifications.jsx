@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
-
-import Notif from "../Notif";
 import NotificationList from "../NotificationList";
 
 export default function Videocalls() {
@@ -22,7 +20,19 @@ export default function Videocalls() {
     const query = new Moralis.Query(Schedule);
     query.find().then((result) => {
       setNotifications(result);
-      console.log(result);
+    });
+  }, [user]);
+
+  const [xyz, setXYZ] = useState([]);
+
+  useEffect(() => {
+    if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
+    const Notifications = Moralis.Object.extend("Notifications");
+    const query = new Moralis.Query(Notifications);
+    query.equalTo("to", user.get("ethAddress").toLowerCase());
+    console.log(user.get("ethAddress"));
+    query.find().then((result) => {
+      setXYZ(result);
     });
   }, [user]);
 
@@ -48,7 +58,7 @@ export default function Videocalls() {
             <br></br>
           </div>
         </div>
-        {notifications.map((data, index) => {
+        {xyz.map((data, index) => {
           return <NotificationList data={data} key={index} />;
         })}
       </div>
