@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Login from "../../src/components/Login";
-import Recordings from "../../src/components/Recordings";
+import RecordingNavTab from "../../src/components/RecordingNavTab";
 import { useMoralis } from "react-moralis";
 import Header from "../../src/components/Header";
 
@@ -16,8 +16,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-
-      <Recordings />
+      <div className="sticky top-0 w-full flex items-center justify-center sm:w-9/12">
+        <RecordingNavTab />
+      </div>
     </div>
   );
 };

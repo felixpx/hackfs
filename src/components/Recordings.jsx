@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import { useMoralis } from "react-moralis";
 import UploadVideo from "../components/UploadVideo";
+import RecordingNavTab from "../components/RecordingNavTab";
 
 const files = [
   {
@@ -35,7 +36,7 @@ export default function Recordings() {
   const videoRef = useRef();
 
   return (
-    <div className="bg-[#f5f5f5] p-18 flex flex-col items-center justify-center rounded-xl w-full sm:w-9/12 shadow-xl">
+    <div>
       <h3 className="text-lg leading-6 py-8 font-medium text-gray-900">
         Videocall Recordings
       </h3>
@@ -75,7 +76,6 @@ export default function Recordings() {
           </li>
         ))}
       </ul>
-      <UploadVideo />
     </div>
   );
 }
