@@ -55,7 +55,7 @@ export default function Videocalls(props) {
           message.set("meetingTitle", data.get("meetingTitle"));
           message.set("meetingDescription", data.get("meetingDescription"));
           message.set("tokenId", data.get("tokenId"));
-          message.set("ScheduleId", data.get.id);
+          message.set("ScheduleId", data.id);
           message.set(
             "team",
             data.get("team") ? data.get("team") : user.get("ethAddress")
