@@ -37,7 +37,7 @@ export default function PoapCP() {
     <div className="flex min-h-0 flex-1 flex-col bg-white">
       <div className="flex flex-1 flex-col overflow-y-auto py-2">
         {/* <div className="flex flex-row items-center justify-center  space-x-4 border-2 border-gray-200 rounded-xl h-96"> */}
-        <PoapItem />
+        {/* <PoapItem /> */}
 
         {/* {poaps.map((poapItem) => (
               <li
