@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <div className="sticky top-0 w-full flex items-center justify-center sm:w-9/12">
+      <div className=" w-full flex flex-col items-center justify-center sm:w-9/12">
         <RecordingNavTab />
       </div>
     </div>

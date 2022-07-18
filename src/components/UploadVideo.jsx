@@ -109,7 +109,7 @@ export default function UploadVideo(props) {
     });
   };
   return (
-    <form className="space-y-8 divide-y divide-gray-200">
+    <form className="space-y-8">
       <Notification
         type={dialogType}
         show={show}
@@ -117,36 +117,15 @@ export default function UploadVideo(props) {
         title={notificationTitle}
         description={notificationDescription}
       />
-      <div className="space-y-8 divide-y divide-gray-200 sm:space-y-5">
+      <div className="space-y-8 sm:space-y-5">
         <div>
           <div>
             <h3 className="text-lg leading-6 font-medium text-gray-900">
-              Upload a record
+              Upload File
             </h3>
           </div>
 
           <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
-            <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
-              <label
-                htmlFor="about"
-                className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
-              >
-                About
-              </label>
-              <div className="mt-1 sm:mt-0 sm:col-span-2">
-                <textarea
-                  id="about"
-                  name="about"
-                  rows={3}
-                  className="max-w-lg shadow-sm block w-full focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border border-gray-300 rounded-md"
-                  defaultValue={""}
-                />
-                <p className="mt-2 text-sm text-gray-500">
-                  Write a few sentences about this meeting.
-                </p>
-              </div>
-            </div>
-
             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
               <label
                 htmlFor="cover-photo"

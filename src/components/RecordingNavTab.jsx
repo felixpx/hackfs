@@ -13,9 +13,6 @@ function classNames(...classes) {
 }
 
 export default function Example() {
-  const { Moralis, user } = useMoralis();
-  const videoUrl = useRef();
-  const videoRef = useRef();
   const [selectedTab, setSelectedTab] = useState("Recordings");
 
   const [search, setSearch] = useState(new Date());
