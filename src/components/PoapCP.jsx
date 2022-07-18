@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
-import PoapCard from "./PoapCard";
+import PoapItem from "./PoapItem";
 
 TimeAgo.addLocale(en);
 
@@ -36,13 +36,10 @@ export default function PoapCP() {
   return (
     <div className="flex min-h-0 flex-1 flex-col bg-white">
       <div className="flex flex-1 flex-col overflow-y-auto py-2">
-        <div className="flex flex-row items-center justify-center  space-x-4 border-2 border-gray-200 rounded-xl h-96">
-          <PoapCard />
-          <PoapCard />
-          <PoapCard />
-          <PoapCard />
-          <PoapCard />
-          {/* {poaps.map((poapItem) => (
+        {/* <div className="flex flex-row items-center justify-center  space-x-4 border-2 border-gray-200 rounded-xl h-96"> */}
+        <PoapItem />
+
+        {/* {poaps.map((poapItem) => (
               <li
                 key={poapItem.id}
                 className="cursor-pointer py-4"
@@ -65,7 +62,7 @@ export default function PoapCP() {
                 </div>
               </li>
             ))} */}
-        </div>
+        {/* </div> */}
       </div>
     </div>
   );

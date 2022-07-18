@@ -1,5 +1,5 @@
 export const MeetingContractAddress =
-  "0x792f63dd3e25da1c3fdb9b4d2e97c40a2eebfa01";
+  "0xB0Da6F68e04F0897A5dA739fAa2fA1F92E49a2Da";
 export const MeetingContractABI = [
   "function subscribed() public view returns (bool)",
   "function subscribe() public ",

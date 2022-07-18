@@ -25,7 +25,6 @@ const navigation = [
     current: false,
   },
   { name: "Schedule", href: "#", icon: CalendarIcon, current: false },
-  { name: "Archive", href: "#", icon: ArchiveIcon, current: false },
   { name: "Poaps", href: "#", icon: UserGroupIcon, current: false },
 ];
 
@@ -51,14 +50,13 @@ export default function Dashboard() {
     web3,
   } = useMoralis();
 
- 
   async function startNotifications() {
     for (const conversation of await xmtpClient.conversations.list()) {
       for await (const message of await conversation.streamMessages()) {
-       if (message.senderAddress != xmtpClient.address) {
-          setData(JSON.parse(message.content))
-          setShowMessage(true)
-                   continue;
+        if (message.senderAddress != xmtpClient.address) {
+          setData(JSON.parse(message.content));
+          setShowMessage(true);
+          continue;
         }
       }
     }
