@@ -12,14 +12,13 @@ export default function Videocalls(props) {
     if (user.get("room") == null || "(undefined)") {
       createRoom();
     } else {
-      sendNotifications()
+      sendNotifications();
       // send invites to particpant addresses.
     }
   }
 
-
   async function sendNotifications() {
-    const room = user.get("room")
+    const room = user.get("room");
     Moralis.Cloud.run("getUser", { address: user.get("ethAddress") }).then(
       (results) => {
         results.forEach((result) => {
@@ -29,17 +28,20 @@ export default function Videocalls(props) {
           message.set("to", result.id);
           message.set("meetingName", "Live Meeting");
           message.set("meetingDate", new Date());
-          message.set("meetingFile", "https://ipfs.moralis.io:2053/ipfs/QmNdhrdFfbYzQjRWjiS3mdrw3E2sVvj6q94tPBhsrPvmR3");
+          message.set(
+            "meetingFile",
+            "https://ipfs.moralis.io:2053/ipfs/QmNdhrdFfbYzQjRWjiS3mdrw3E2sVvj6q94tPBhsrPvmR3"
+          );
           message.set("meetingTitle", "Live Meeting");
           message.set("meetingDescription", "Live Meeting");
           message.set("tokenId", "0");
-          message.set('accepted',true)
+          message.set("accepted", true);
           message.set(
             "team",
             user.get("team") ? user.get("team") : user.get("ethAddress")
           );
-          console.log(user.get("room"))
-          message.set("room", JSON.parse(room));
+          console.log(user.get("room"));
+          message.set("room", JSON.parse(user.get("room")));
           message.save().then(async (meeting) => {
             const address = ethers.utils.getAddress(meeting.get("to"));
             const conversation =
@@ -48,19 +50,16 @@ export default function Videocalls(props) {
             try {
               await conversation.send(JSON.stringify(meeting));
             } catch (error) {
-              console.log(error)
+              console.log(error);
             }
           });
-       
         });
         router.push("/videochat");
-
       }
     );
   }
 
-
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState(user.get("room"));
   const createRoom = async (e) => {
     const result = await Moralis.Cloud.run("createMeeting", {
       endDate: "2099-02-18T14:23:00.000Z",
@@ -73,7 +72,7 @@ export default function Videocalls(props) {
       user.save();
       teams.set("room", room);
       await teams.save();
-      sendNotifications()
+      sendNotifications();
     }
   };
 

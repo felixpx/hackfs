@@ -19,7 +19,7 @@ export default function Videocalls() {
     const Schedule = Moralis.Object.extend("Schedules");
 
     const query = new Moralis.Query(Schedule);
-    query.equalTo("to",user.get("ethAddress"))
+    query.equalTo("to", user.get("ethAddress"));
     query.find().then((result) => {
       setNotifications(result);
     });
@@ -32,7 +32,7 @@ export default function Videocalls() {
     const Notifications = Moralis.Object.extend("Notifications");
     const query = new Moralis.Query(Notifications);
     query.equalTo("to", user.get("ethAddress").toLowerCase());
-    console.log(user.get("ethAddress"));
+    query.addDescending("meetingDate");
     query.find().then((result) => {
       setXYZ(result);
     });
