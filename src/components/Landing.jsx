@@ -1,92 +1,6 @@
-import {
-  ChatAltIcon,
-  DocumentReportIcon,
-  HeartIcon,
-  InboxIcon,
-  PencilAltIcon,
-  ReplyIcon,
-  TrashIcon,
-  UserGroupIcon,
-  UsersIcon,
-  VideoCameraIcon,
-} from "@heroicons/react/outline";
+import { UserGroupIcon, VideoCameraIcon } from "@heroicons/react/outline";
+import { useMoralis } from "react-moralis";
 
-const features = [
-  {
-    name: "Unlimited Inboxes",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: InboxIcon,
-  },
-  {
-    name: "Manage Team Members",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: UsersIcon,
-  },
-  {
-    name: "Spam Report",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: TrashIcon,
-  },
-  {
-    name: "Compose in Markdown",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: PencilAltIcon,
-  },
-  {
-    name: "Team Reporting",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: DocumentReportIcon,
-  },
-  {
-    name: "Saved Replies",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: ReplyIcon,
-  },
-  {
-    name: "Email Commenting",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: ChatAltIcon,
-  },
-  {
-    name: "Connect with Customers",
-    description:
-      "Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.",
-    icon: HeartIcon,
-  },
-];
-const metrics = [
-  {
-    id: 1,
-    stat: "8K+",
-    emphasis: "Companies",
-    rest: "use laoreet amet lacus nibh integer quis.",
-  },
-  {
-    id: 2,
-    stat: "25K+",
-    emphasis: "Countries around the globe",
-    rest: "lacus nibh integer quis.",
-  },
-  {
-    id: 3,
-    stat: "98%",
-    emphasis: "Customer satisfaction",
-    rest: "laoreet amet lacus nibh integer quis.",
-  },
-  {
-    id: 4,
-    stat: "12M+",
-    emphasis: "Issues resolved",
-    rest: "lacus nibh integer quis.",
-  },
-];
 const footerNavigation = {
   solutions: [
     { name: "Marketing", href: "#" },
@@ -178,6 +92,7 @@ const footerNavigation = {
 };
 
 export default function Landing() {
+  const { authenticate } = useMoralis();
   return (
     <div className="bg-white">
       <main>
@@ -196,15 +111,15 @@ export default function Landing() {
               </div>
               <div className="relative px-4 py-16 sm:px-6 sm:py-24 lg:py-32 lg:px-8">
                 <h1 className="text-center text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-                  <span className="block text-white">Live Meetings</span>
-                  <span className="block text-indigo-200">
+                  <span className="block text-white">Optik</span>
+                  <span className="block text-4xl text-indigo-200">
                     for organizations
                   </span>
                 </h1>
                 <p className="mt-6 max-w-lg mx-auto text-center text-xl text-indigo-200 sm:max-w-3xl">
-                  Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure
-                  qui lorem cupidatat commodo. Elit sunt amet fugiat veniam
-                  occaecat fugiat aliqua.
+                  Optik is a web3 enabled video conferencing application. Our
+                  platform provides a place for DAO contributors, teams and
+                  groups to host meetings, online events and more.
                 </p>
                 <div className="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
                   <div className="space-y-4 sm:space-y-0 sm:mx-auto sm:inline-grid sm:grid-cols-2 sm:gap-5">
@@ -212,14 +127,15 @@ export default function Landing() {
                       href="#"
                       className="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-indigo-700 bg-white hover:bg-indigo-50 sm:px-8"
                     >
-                      Get started
+                      More Info
                     </a>
-                    <a
+                    <button
                       href="#"
+                      onClick={authenticate}
                       className="flex items-center justify-center px-4 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-500 bg-opacity-60 hover:bg-opacity-70 sm:px-8"
                     >
-                      Live demo
-                    </a>
+                      Login
+                    </button>
                   </div>
                 </div>
               </div>
@@ -258,8 +174,8 @@ export default function Landing() {
               <div className="col-span-1 flex justify-center md:col-span-2 md:col-start-2 lg:col-span-1">
                 <img
                   className="h-12 opacity-80 rounded-full"
-                  src="/sponsors/valist.jpeg"
-                  alt="valist"
+                  src="/sponsors/tableland.jpeg"
+                  alt="tableland"
                 />
               </div>
               <div className="col-span-2 flex justify-center md:col-span-2 md:col-start-4 lg:col-span-1">
@@ -313,7 +229,7 @@ export default function Landing() {
                   <blockquote>
                     <div>
                       <p className="text-base text-gray-500">
-                        &ldquo;Dazoom enables us to host important team meetings
+                        &ldquo;Optik enables us to host important team meetings
                         with poaps and snapshots of relevant information shared
                         in meetings. &rdquo;
                       </p>
@@ -370,7 +286,7 @@ export default function Landing() {
                         href="#"
                         className="inline-flex bg-gradient-to-r from-purple-600 to-indigo-600 bg-origin-border px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white hover:from-purple-700 hover:to-indigo-700"
                       >
-                        Get started
+                        Contact Us
                       </a>
                     </div>
                   </div>

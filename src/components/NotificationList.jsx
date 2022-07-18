@@ -1,9 +1,4 @@
-import { PhoneOutgoingIcon } from "@heroicons/react/outline";
-import {
-  CheckCircleIcon,
-  ChevronRightIcon,
-  MailIcon,
-} from "@heroicons/react/solid";
+import { ChevronRightIcon, MailIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import {

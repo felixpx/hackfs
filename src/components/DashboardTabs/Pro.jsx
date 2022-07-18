@@ -81,6 +81,10 @@ export default function Pro() {
     }
   };
 
+  const senderAddress =
+    user.get("ethAddress").slice(0, 4).concat("...") +
+    user.get("ethAddress").slice(38, 44);
+
   const Subscribe = async () => {
     try {
       const MeetingContract = new ethers.Contract(
@@ -97,6 +101,14 @@ export default function Pro() {
       setNotificationDescription("Subscription Successful.");
       setShow(true);
       setSubscribed(true);
+      const Poaps = Moralis.Object.extend("Poaps");
+      const poaps = new Poaps();
+      poaps.set("name", "Pro Subscription");
+      poaps.set("sender", senderAddress);
+      poaps.set("isSubscribed", true);
+      poaps.set("type", "Pro");
+      poaps.set("img", "insert img file");
+      poaps.save();
     } catch (error) {
       setDialogType(2); //Failed
       setNotificationTitle("Subscription Failed");

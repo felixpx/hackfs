@@ -47,15 +47,13 @@ export default function Videocalls() {
               Notifications
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              Announcements and Messages from your Organisation.
+              Announcements and invitations, powered by XMTP
             </p>
             <br></br>
             <hr></hr>
             <p className="mt-1 text-xs text-gray-500">
-              Pro features include: unlimited calls, unlimited storing of past
-              calls on ipfs with timestamps for reviewing specific parts of
-              meetings, poaps for team members and direct messaging features via
-              xmtp.
+              Notifications are powered by the extensible message transport
+              protocol, XMTP.
             </p>
             <br></br>
           </div>

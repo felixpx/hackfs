@@ -56,28 +56,21 @@ export default function Header() {
               <MenuIcon className="h-6 w-6" aria-hidden="true" />
             </Popover.Button>
           </div>
-          {/* {!isAuthenticated && (
-            <Popover.Group as="nav" className="hidden md:flex space-x-10">
-              <a
-                href="/"
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
-              >
-                Home
-              </a>
-              <a
-                href="#"
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
-              >
-                Dashboard
-              </a>
-              <a
-                href="#"
-                className="text-base font-medium text-gray-500 hover:text-gray-900"
-              >
-                Pro
-              </a>
-            </Popover.Group>
-          )} */}
+
+          {!isAuthenticated ? (
+            <p className="text-center text-lg font-semibold uppercase text-gray-500 tracking-wide">
+              O P T I K
+            </p>
+          ) : (
+            <div>
+              <p className="text-center text-lg font-semibold uppercase text-gray-500 tracking-wide">
+                O P T I K
+              </p>
+              <p className="text-center text-xs font-semithin uppercase text-gray-500 tracking-wide">
+                powered by XMTP
+              </p>
+            </div>
+          )}
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             {!isAuthenticated ? (
               <button

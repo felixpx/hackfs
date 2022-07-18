@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from "react";
-import { useMoralis } from "react-moralis";
+import { useState } from "react";
 import Recordings from "./Recordings";
 import UploadVideo from "./UploadVideo";
 
@@ -12,7 +11,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example() {
+export default function RecordingNavTab() {
   const [selectedTab, setSelectedTab] = useState("Recordings");
 
   const [search, setSearch] = useState(new Date());

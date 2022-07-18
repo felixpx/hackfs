@@ -68,7 +68,7 @@ export default function Videocalls(props) {
             try {
               await conversation.send(JSON.stringify(meeting));
             } catch (error) {
-              console.log(error)
+              console.log(error);
             }
           });
         });
@@ -146,7 +146,6 @@ export default function Videocalls(props) {
           endDate: "2099-02-18T14:23:00.000Z",
         });
 
-
         const Schedule = new Moralis.Object.extend("Schedules");
         const schedule = new Schedule();
         schedule.set("room", result);
@@ -202,7 +201,7 @@ export default function Videocalls(props) {
               Schedule
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              Organize your scheduled calls.
+              Organize your schedule, start meetings and look at archived files.
             </p>
             <br></br>
             <hr></hr>
