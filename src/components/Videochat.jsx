@@ -17,7 +17,7 @@ export default function Videochat() {
       {/* {JSON.stringify(room)} */}
       <iframe
         className="h-screen w-full"
-        src={room.hostRoomUrl}
+        src={room?.hostRoomUrl}
         allow="camera; microphone; fullscreen; speaker; display-capture"
       ></iframe>
     </div>

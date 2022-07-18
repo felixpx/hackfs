@@ -67,7 +67,9 @@ export default function Videocalls(props) {
             // Send a message
             try {
               await conversation.send(JSON.stringify(meeting));
-            } catch (error) {}
+            } catch (error) {
+              console.log(error)
+            }
           });
         });
       }
@@ -95,7 +97,6 @@ export default function Videocalls(props) {
         console.log("uploading meeting file");
         await saveFile("meetingFile", meetingFile, { saveIPFS: true }).then(
           async (hash) => {
-            console.log(hash);
             ipfsFile = hash._ipfs;
           }
         );
@@ -132,23 +133,19 @@ export default function Videocalls(props) {
         );
 
         const receipt = await transaction.wait();
-        // console.log(receipt.logs)
         let abi = [
           "event MeetingCreated(uint256 tokenId,string name,address owner,uint256 dateCreated,uint256 startDate,bool isPublic,uint256 cost)",
         ];
 
         let iface = new ethers.utils.Interface(abi);
         let log = iface.parseLog(receipt.logs[0]); // here you can add your own logic to find the correct log
-        console.log(log.args);
 
         tokenId = log.args.tokenId.toString();
-        console.log(tokenId);
 
         const result = await Moralis.Cloud.run("createMeeting", {
           endDate: "2099-02-18T14:23:00.000Z",
         });
 
-        console.log(result.data);
 
         const Schedule = new Moralis.Object.extend("Schedules");
         const schedule = new Schedule();
@@ -186,7 +183,6 @@ export default function Videocalls(props) {
     query.descending("meetingDate");
     query.find().then((result) => {
       setNewDate(result);
-      console.log(result);
     });
   }, [user, search]);
   console.log(props.xmtpClient?.conversations);

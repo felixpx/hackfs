@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useMoralis } from "react-moralis";
-
-export default function Videocalls() {
+import { ethers } from "ethers";
+export default function Videocalls(props) {
   const { user, Moralis } = useMoralis();
   const router = useRouter();
 
@@ -12,10 +12,53 @@ export default function Videocalls() {
     if (user.get("room") == null || "(undefined)") {
       createRoom();
     } else {
-      router.push("/videochat");
+      sendNotifications()
       // send invites to particpant addresses.
     }
   }
+
+
+  async function sendNotifications() {
+    const room = user.get("room")
+    Moralis.Cloud.run("getUser", { address: user.get("ethAddress") }).then(
+      (results) => {
+        results.forEach((result) => {
+          const Message = new Moralis.Object.extend("Notifications");
+          const message = new Message();
+          message.set("from", user.get("ethAddress"));
+          message.set("to", result.id);
+          message.set("meetingName", "Live Meeting");
+          message.set("meetingDate", new Date());
+          message.set("meetingFile", "https://ipfs.moralis.io:2053/ipfs/QmNdhrdFfbYzQjRWjiS3mdrw3E2sVvj6q94tPBhsrPvmR3");
+          message.set("meetingTitle", "Live Meeting");
+          message.set("meetingDescription", "Live Meeting");
+          message.set("tokenId", "0");
+          message.set('accepted',true)
+          message.set(
+            "team",
+            user.get("team") ? user.get("team") : user.get("ethAddress")
+          );
+          console.log(user.get("room"))
+          message.set("room", JSON.parse(room));
+          message.save().then(async (meeting) => {
+            const address = ethers.utils.getAddress(meeting.get("to"));
+            const conversation =
+              await props.xmtpClient.conversations.newConversation(address);
+            // Send a message
+            try {
+              await conversation.send(JSON.stringify(meeting));
+            } catch (error) {
+              console.log(error)
+            }
+          });
+       
+        });
+        router.push("/videochat");
+
+      }
+    );
+  }
+
 
   const [room, setRoom] = useState("");
   const createRoom = async (e) => {
@@ -30,7 +73,7 @@ export default function Videocalls() {
       user.save();
       teams.set("room", room);
       await teams.save();
-      router.push("/videochat");
+      sendNotifications()
     }
   };
 

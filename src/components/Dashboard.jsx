@@ -51,14 +51,14 @@ export default function Dashboard() {
     web3,
   } = useMoralis();
 
+ 
   async function startNotifications() {
     for (const conversation of await xmtpClient.conversations.list()) {
       for await (const message of await conversation.streamMessages()) {
-        if (message.senderAddress != xmtpClient.address) {
-          // setData(JSON.load(message.text))
-          //setShowMessage(true)
-          console.log(message.text);
-          continue;
+       if (message.senderAddress != xmtpClient.address) {
+          setData(JSON.parse(message.content))
+          setShowMessage(true)
+                   continue;
         }
       }
     }
@@ -115,7 +115,7 @@ export default function Dashboard() {
           <Pro />
         </div>
         <div hidden={selectedTab != "Videocalls"}>
-          <Videocalls />
+          <Videocalls xmtpClient={xmtpClient} />
         </div>
         <div hidden={selectedTab != "Notifications"}>
           <Notifications />
@@ -130,7 +130,7 @@ export default function Dashboard() {
           <Poaps />
         </div>
       </div>
-      <MyMessage show={showMessage} close={closeMessage} data={data} />
+      <MyMessage showMessage={showMessage} close={closeMessage} data={data} />
     </div>
   );
 }

@@ -17,7 +17,9 @@ export default function Videocalls() {
   useEffect(() => {
     if (isAuthenticated && !isWeb3Enabled && !isWeb3EnableLoading) enableWeb3();
     const Schedule = Moralis.Object.extend("Schedules");
+
     const query = new Moralis.Query(Schedule);
+    query.equalTo("to",user.get("ethAddress"))
     query.find().then((result) => {
       setNotifications(result);
     });
