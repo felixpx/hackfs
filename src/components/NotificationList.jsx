@@ -1,6 +1,6 @@
 import { ChevronRightIcon, MailIcon } from "@heroicons/react/solid";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   MeetingContractAddress,
   MeetingContractABI,
@@ -9,6 +9,7 @@ import { ethers } from "ethers";
 import { useMoralis } from "react-moralis";
 import Notification from "./Notification";
 import { userAgent } from "next/server";
+import ViewMeeting from "./ViewMeeting";
 
 export default function NotificationList(props) {
   const router = useRouter();
@@ -57,11 +58,27 @@ export default function NotificationList(props) {
     }
   }
 
+  async function viewArchive() {
+    router.push(`/recordings/${props.data.get("ScheduleId")}`);
+  }
+
   const messageSender =
     props.data.get("from").slice(0, 4).concat("...") +
     props.data.get("from").slice(38, 44);
 
   const date = props.data.get("meetingDate").toString();
+
+  const [showButton, setShowButton] = useState();
+
+  useEffect(() => {
+    if (props.data.get("accepted") == true) {
+      if (props.data.get("ScheduleId") != undefined || null) {
+        setShowButton(true);
+      } else {
+        false;
+      }
+    }
+  }, []);
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -109,10 +126,19 @@ export default function NotificationList(props) {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center justify-center">
-                <p className="text-sm font-medium text-gray-900">
+              <div className="flex flex-row space-x-4 items-center justify-center">
+                <button
+                  onClick={viewArchive}
+                  className="text-sm font-medium hover:text-gray-400 text-gray-900"
+                >
+                  {showButton ? "Archive" : ""}
+                </button>
+                <button
+                  onClick={handleClick}
+                  className="text-sm font-medium text-gray-900"
+                >
                   {join ? "Join" : "Accept"}
-                </p>
+                </button>
                 <ChevronRightIcon
                   className="h-5 w-5 text-gray-400"
                   aria-hidden="true"
