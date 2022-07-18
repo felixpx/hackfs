@@ -138,9 +138,15 @@ export default function Videocalls(props) {
         ];
 
         let iface = new ethers.utils.Interface(abi);
-        let log = iface.parseLog(receipt.logs[0]); // here you can add your own logic to find the correct log
+        let log = iface.parseLog(receipt.logs[1]); // here you can add your own logic to find the correct log
 
         tokenId = log.args.tokenId.toString();
+        console.log(tokenId);
+
+        // let iface = new ethers.utils.Interface(abi);
+        // let log = iface.parseLog(receipt.logs[0]); // here you can add your own logic to find the correct log
+
+        // tokenId = log.args.tokenId.toString();
 
         const result = await Moralis.Cloud.run("createMeeting", {
           endDate: "2099-02-18T14:23:00.000Z",

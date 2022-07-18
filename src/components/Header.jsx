@@ -108,9 +108,9 @@ export default function Header() {
                 <div className="flex items-center justify-between">
                   <div>
                     <img
-                      className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/workflow-mark-purple-600-to-indigo-600.svg"
-                      alt="Workflow"
+                      className="h-16 w-auto"
+                      src="/optik-lg.png"
+                      alt="Optik"
                     />
                   </div>
                   <div className="-mr-2">

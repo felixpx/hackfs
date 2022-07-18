@@ -8,6 +8,7 @@ import {
 import { ethers } from "ethers";
 import { useMoralis } from "react-moralis";
 import Notification from "./Notification";
+import { userAgent } from "next/server";
 
 export default function NotificationList(props) {
   const router = useRouter();
@@ -86,7 +87,7 @@ export default function NotificationList(props) {
                 <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                   <div>
                     <p className="text-sm font-medium text-indigo-600 truncate">
-                      {props.data.get("team") || props.data.get("username")}
+                      {props.data.get("team") || messageSender}
                     </p>
                     <p className="mt-2 flex items-center text-sm text-gray-500">
                       <MailIcon

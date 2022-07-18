@@ -13,7 +13,7 @@ export default function Videocalls() {
               Poaps
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              Proof of attendance list.
+              Proof of attendance & Subscription Receipts.
             </p>
             <br></br>
             <hr></hr>
