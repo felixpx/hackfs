@@ -101,6 +101,7 @@ export default function Pro() {
       setNotificationDescription("Subscription Successful.");
       setShow(true);
       setSubscribed(true);
+
       const Poaps = Moralis.Object.extend("Poaps");
       const poaps = new Poaps();
       poaps.set("name", "Pro Subscription");

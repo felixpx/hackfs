@@ -2,9 +2,9 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { MoralisProvider } from "react-moralis";
 import { MoralisDappProvider } from "../src/providers/MoralisDappProvider/MoralisDappProvider";
-
-const APP_ID = "exW1tdLP6HIC7SFX7WTySWgkHziZVShwA0DZxNlg";
-const SERVER_URL = "https://govdtsjcruxd.usemoralis.com:2053/server";
+import { env } from "../next.config";
+const APP_ID = process.env.NEXT_APP_MORALIS_APP_ID;
+const SERVER_URL = process.env.NEXT_APP_MORALIS_SERVER_URL;
 
 // const APP_ID = NEXT_APP_MORALIS_SERVER_URL
 // const SERVER_URL = NEXT_APP_MORALIS_APP_ID
