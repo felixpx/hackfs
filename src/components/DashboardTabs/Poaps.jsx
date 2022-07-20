@@ -1,9 +1,6 @@
-import { useState } from "react";
 import PoapCP from "../PoapCP";
 
-export default function Videocalls() {
-  const [isPro, setIsPro] = useState(false);
-
+export default function Poaps() {
   return (
     <div className="shadow sm:rounded-md sm:overflow-hidden w-full">
       <div className="bg-white py-6 px-4 space-y-6 sm:p-6">

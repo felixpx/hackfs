@@ -7,6 +7,7 @@ import {
 } from "../Contracts/MeetingContract";
 import { USDCAddress, USDCABI } from "../Contracts/USDCContract";
 import Notification from "../Notification";
+import { CheckCircleIcon } from "@heroicons/react/outline";
 
 export default function Pro() {
   const { Moralis, user, isAuthenticated, web3, isWeb3Enabled, enableWeb3 } =
@@ -174,7 +175,14 @@ export default function Pro() {
         <div>
           <div>
             <h3 className="text-lg leading-6 font-medium text-gray-900">
-              {isPro ? "Welcome to Pro " : "Pro Membership"}
+              {!gotSubscribed && !subscribed ? (
+                <div>Pro Membership</div>
+              ) : (
+                <div className="items-center flex flex-row space-x-2">
+                  <p>Pro</p>
+                  <CheckCircleIcon className="h-4 text-green-700" />
+                </div>
+              )}
             </h3>
             <p className="mt-1 text-sm text-gray-500">
               {!isPro

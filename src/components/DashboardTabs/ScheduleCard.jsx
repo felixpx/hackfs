@@ -52,7 +52,7 @@ export default function ScheduleCard(props) {
                 className="w-5 h-5 text-gray-400"
                 aria-hidden="true"
               />
-              <span className="ml-2">Host Meeting</span>
+              <span className="ml-2">Call</span>
             </button>
           </div>
           <div className="w-0 flex-1 flex">
@@ -64,7 +64,7 @@ export default function ScheduleCard(props) {
                 className="w-5 h-5 text-gray-400"
                 aria-hidden="true"
               />
-              <span className="ml-2">Create Poap</span>
+              <span className="ml-2">Poap</span>
             </button>
           </div>
           <div className="-ml-px w-0 flex-1 flex">
@@ -73,7 +73,7 @@ export default function ScheduleCard(props) {
               className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
             >
               <SaveIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
-              <span className="ml-2">Recordings</span>
+              <span className="ml-2">Archive</span>
             </button>
           </div>
         </div>

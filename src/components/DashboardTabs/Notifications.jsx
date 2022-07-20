@@ -47,7 +47,7 @@ export default function Videocalls() {
               Notifications
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              Announcements and invitations, powered by XMTP
+              Announcements and invitations powered by XMTP
             </p>
             <br></br>
             <hr></hr>
