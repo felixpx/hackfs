@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useMoralisWeb3Api } from "react-moralis";
+import { useNFTBalance } from "../hooks/useNFTBalance";
 
 export default function PoapItem() {
   const { Web3API } = useMoralisWeb3Api();
 
   const [poaps, setPoaps] = useState([]);
+
+  const { getNFTBalance, NFTBalance, error, isLoading } = useNFTBalance();
 
   // useEffect(() => {
   //   const Poaps = Moralis.Object.extend("Poaps");
@@ -31,7 +34,6 @@ export default function PoapItem() {
     };
     fetchNFTs();
   }, []);
-  // get testnet NFTs for user
 
   return (
     <ul

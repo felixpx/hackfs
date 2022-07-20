@@ -144,11 +144,6 @@ export default function Videocalls(props) {
         tokenId = log.args.tokenId.toString();
         console.log(tokenId);
 
-        // let iface = new ethers.utils.Interface(abi);
-        // let log = iface.parseLog(receipt.logs[0]); // here you can add your own logic to find the correct log
-
-        // tokenId = log.args.tokenId.toString();
-
         const result = await Moralis.Cloud.run("createMeeting", {
           endDate: "2099-02-18T14:23:00.000Z",
         });
@@ -268,15 +263,7 @@ export default function Videocalls(props) {
                 className={` focus:ring-indigo-500 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300`}
               />
             </div>
-            {/* <div className="mt-1 rounded-md shadow-sm flex">
-              <input
-                type="file"
-                name="meetingFile"
-                id="meetingFile"
-                placeholder="Title"
-                className={` focus:ring-indigo-500 py-2 focus:border-indigo-500 flex-grow block w-full min-w-0 rounded-none bg-transparent rounded-r-md sm:text-sm border-gray-300`}
-              />
-            </div> */}
+
             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
               <label
                 htmlFor="cover-photo"

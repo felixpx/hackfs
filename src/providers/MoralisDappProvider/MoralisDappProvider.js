@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import MoralisDappContext from "./context";
 
@@ -35,7 +35,7 @@ function MoralisDappProvider({ children }) {
 }
 
 function useMoralisDapp() {
-  const context = React.useContext(MoralisDappContext);
+  const context = useContext(MoralisDappContext);
   if (context === undefined) {
     throw new Error("useMoralisDapp must be used within a MoralisDappProvider");
   }
