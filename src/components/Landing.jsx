@@ -117,7 +117,7 @@ export default function Landing() {
                   </span>
                 </h1>
                 <p className="mt-6 max-w-lg mx-auto text-center text-xl text-indigo-200 sm:max-w-3xl">
-                  Optik is a web3 enabled video conferencing application. Our
+                  Optik is a web3 enabled video conferencing application. The
                   platform provides a place for DAO contributors, teams and
                   groups to host meetings, online events and more.
                 </p>

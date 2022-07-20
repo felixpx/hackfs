@@ -1,21 +1,11 @@
 import { useEffect, useState } from "react";
-import { useMoralisWeb3Api } from "react-moralis";
-import { useNFTBalance } from "../hooks/useNFTBalance";
+import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 
 export default function PoapItem() {
   const { Web3API } = useMoralisWeb3Api();
+  const { Moralis } = useMoralis();
 
   const [poaps, setPoaps] = useState([]);
-
-  const { getNFTBalance, NFTBalance, error, isLoading } = useNFTBalance();
-
-  // useEffect(() => {
-  //   const Poaps = Moralis.Object.extend("Poaps");
-  //   const query = new Moralis.Query(Poaps);
-  //   query.find().then((result) => {
-  //     setPoaps(result);
-  //   });
-  // }, []);
 
   useEffect(() => {
     const fetchNFTs = async () => {
@@ -24,10 +14,12 @@ export default function PoapItem() {
       });
       //console.log(testnetNFTs);
       let _poaps = [];
-      testnetNFTs.result.forEach((nft) => {
+      testnetNFTs.result.forEach(async (nft) => {
         if (nft.token_address == "0x318a3dc9f57a81c7ee34f9e010674082139cc5da") {
-          console.log(nft);
-          _poaps.push(nft);
+          const tokenIdMetadata = await Moralis.Cloud.run("getMetadata", {
+            token_id: nft.token_id,
+          });
+          _poaps.push(tokenIdMetadata);
         }
       });
       setPoaps(_poaps);
