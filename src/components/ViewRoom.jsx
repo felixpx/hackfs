@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
+import BackButton from "./BackButton";
 
 export default function Videochat() {
   const { user, Moralis } = useMoralis();
@@ -28,12 +29,17 @@ export default function Videochat() {
   // }, [user]);
 
   return (
-    <div className="w-full items-center justify-center">
-      <iframe
-        className="h-screen w-full"
-        src={room}
-        allow="camera; microphone; fullscreen; speaker; display-capture"
-      ></iframe>
+    <div className="flex flex-col w-full">
+      <HeaderVid />
+      <BackButton />
+
+      <div className="w-full items-center justify-center">
+        <iframe
+          className="h-screen w-full"
+          src={room}
+          allow="camera; microphone; fullscreen; speaker; display-capture"
+        ></iframe>
+      </div>
     </div>
   );
 }
