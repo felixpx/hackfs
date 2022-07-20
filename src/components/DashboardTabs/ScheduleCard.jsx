@@ -1,17 +1,20 @@
 import { useRouter } from "next/router";
 import { VideoCameraIcon, SaveIcon } from "@heroicons/react/solid";
+import { UserAddIcon } from "@heroicons/react/outline";
 
 export default function ScheduleCard(props) {
   const router = useRouter();
 
-  function viewMeeting(e) {
-    // e.preventDefault();
+  function viewMeeting() {
     router.push(`/hostmeeting/${props.data.id}`);
   }
 
-  function viewRecordings(e) {
-    // e.preventDefault();
+  function viewRecordings() {
     router.push(`/recordings/${props.data.id}`);
+  }
+
+  function createPoap() {
+    router.push(`/createpoap/${props.data.id}`);
   }
   return (
     <li
@@ -49,7 +52,19 @@ export default function ScheduleCard(props) {
                 className="w-5 h-5 text-gray-400"
                 aria-hidden="true"
               />
-              <span className="ml-3">Host Meeting</span>
+              <span className="ml-2">Host Meeting</span>
+            </button>
+          </div>
+          <div className="w-0 flex-1 flex">
+            <button
+              onClick={createPoap}
+              className="relative -mr-px w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-bl-lg hover:text-gray-500"
+            >
+              <UserAddIcon
+                className="w-5 h-5 text-gray-400"
+                aria-hidden="true"
+              />
+              <span className="ml-2">Create Poap</span>
             </button>
           </div>
           <div className="-ml-px w-0 flex-1 flex">
@@ -58,7 +73,7 @@ export default function ScheduleCard(props) {
               className="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-500"
             >
               <SaveIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
-              <span className="ml-3">Recordings</span>
+              <span className="ml-2">Recordings</span>
             </button>
           </div>
         </div>
