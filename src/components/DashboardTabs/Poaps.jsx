@@ -10,7 +10,7 @@ export default function Poaps() {
               Poaps
             </h3>
             <p className="mt-1 text-sm text-gray-500">
-              Proof of attendance & Subscription Receipts.
+              Proof of attendance tokens by open poap.
             </p>
             <br></br>
             <hr></hr>
