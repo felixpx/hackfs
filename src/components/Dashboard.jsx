@@ -51,13 +51,16 @@ export default function Dashboard() {
   } = useMoralis();
 
   async function startNotifications() {
+    console.log("line 0");
     for (const conversation of await xmtpClient.conversations.list()) {
       for await (const message of await conversation.streamMessages()) {
+        console.log("line 1");
         if (message.senderAddress != xmtpClient.address) {
           setData(JSON.parse(message.content));
           setShowMessage(true);
           continue;
         }
+        console.log("line 2");
       }
     }
   }
@@ -73,8 +76,11 @@ export default function Dashboard() {
   }, [user, web3]);
 
   useEffect(() => {
-    if (xmtpClient?.conversations) startNotifications();
+    if (xmtpClient?.conversations) {
+      startNotifications();
+    }
   }, [xmtpClient?.conversations]);
+
   return (
     <div className="lg:grid lg:grid-cols-12 lg:gap-x-5">
       <aside className="py-6 px-2 sm:px-6 lg:py-0 lg:px-0 lg:col-span-3">
@@ -108,6 +114,7 @@ export default function Dashboard() {
         </nav>
       </aside>
 
+      <MyMessage showMessage={showMessage} close={closeMessage} data={data} />
       <div className="space-y-6 sm:px-6 lg:px-0 lg:col-span-9">
         <div hidden={selectedTab != "Pro"}>
           <Pro />
@@ -128,7 +135,6 @@ export default function Dashboard() {
           <Poaps />
         </div>
       </div>
-      <MyMessage showMessage={showMessage} close={closeMessage} data={data} />
     </div>
   );
 }
