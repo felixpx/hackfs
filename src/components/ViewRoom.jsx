@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMoralis } from "react-moralis";
 import BackButton from "./BackButton";
+import HeaderVid from "./HeaderVid";
 
 export default function Videochat() {
   const { user, Moralis } = useMoralis();

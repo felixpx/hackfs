@@ -54,7 +54,8 @@ export default function PoapItem() {
             />
             <dl className="mt-3 flex-grow flex flex-col justify-between">
               <h3 className="my-2 text-gray-900 text-xs">
-                {data.data.description}
+                {data.data.description.slice(0, 8).concat("...") +
+                  data.data.description.slice(38, 44)}
               </h3>
             </dl>
           </div>
