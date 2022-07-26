@@ -7,8 +7,8 @@ module.exports = {
   env: {
     // APP ID & SERVER URL
     NEXT_APP_MORALIS_SERVER_URL:
-      "https://govdtsjcruxd.usemoralis.com:2053/server",
-    NEXT_APP_MORALIS_APP_ID: "exW1tdLP6HIC7SFX7WTySWgkHziZVShwA0DZxNlg",
+      "https://sgru3r3esqd3.usemoralis.com:2053/server",
+    NEXT_APP_MORALIS_APP_ID: "E00axTgEdAhtPWrHBd4Tc1VmqXN9LMxZ4an91q61",
     REACT_APP_WEB3_STORAGE_KEY:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweEE1ZjRiNjUyYjU4QzU1NDI0Mjg2YTVjZkE3RjBmRmEyYzg5ZjhiMmUiLCJpc3MiOiJ3ZWIzLXN0b3JhZ2UiLCJpYXQiOjE2Mjc1NTE0MTE0MzEsIm5hbWUiOiJIYWNrRlMgRGVhZCBNYW4gU3dpdGNoIn0.lEQ2eAGK8zFWORXI6t6JqwPueKOBuNz6yCsxWxDiIEg",
     REACT_APP_NFT_STORAGE_API_KEY:
